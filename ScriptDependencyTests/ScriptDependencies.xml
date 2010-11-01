@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Dependencies>
+
+  <Dependency Name="jQuery-validate-unobtrusive">
+    <ScriptFile>~/Scripts/jquery.validate.unobtrusive.js</ScriptFile>
+    <RequiredDependencies>
+      <Name>jquery</Name>
+      <Name>jQuery-validate</Name>
+    </RequiredDependencies>
+  </Dependency>
+
+  <Dependency Name="jQuery-validate">
+    <ScriptFile>~/Scripts/jquery.validate.js</ScriptFile>
+    <RequiredDependencies>
+      <Name>jquery</Name>
+    </RequiredDependencies>
+  </Dependency>
+
+  <Dependency Name="jQuery">
+    <ScriptFile>~/Scripts/jquery-1.4.1.js</ScriptFile>
+  </Dependency>
+
+  <Dependency Name="Microsoft-Ajax">
+    <ScriptFile>~/Scripts/MicrosoftAjax.js</ScriptFile>
+  </Dependency>
+
+  <Dependency Name="Microsoft-Mvc-Ajax">
+    <ScriptFile>~/Scripts/MicrosoftMvcAjax.js</ScriptFile>
+    <RequiredDependencies>
+      <Name>Microsoft-Ajax</Name>
+    </RequiredDependencies>
+  </Dependency>
+
+  <Dependency Name="Microsoft-Mvc-Validation">
+    <ScriptFile>~/Scripts/MicrosoftMvcValidation.js</ScriptFile>
+    <RequiredDependencies>
+      <Name>Microsoft-Ajax</Name>
+      <Name>Microsoft-Mvc-Ajax</Name>
+    </RequiredDependencies>
+  </Dependency>
+
+  <Dependency Name="AllScripts">
+    <RequiredDependencies>
+      <Name>jQuery-validate-unobtrusive</Name>
+      <Name>Microsoft-Mvc-Validation</Name>
+    </RequiredDependencies>
+  </Dependency>
+</Dependencies>
