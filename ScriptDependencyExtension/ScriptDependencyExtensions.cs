@@ -123,8 +123,8 @@ namespace ScriptDependencyExtension
 
         private static string ChangeScriptNameToDebug(string resolvedScriptPath)
         {
-            var scriptPreffix = resolvedScriptPath.Substring(0, resolvedScriptPath.Length - 3);
-            return string.Format("{0}.debug.js", scriptPreffix);
+            var scriptPrefix = resolvedScriptPath.Substring(0, resolvedScriptPath.Length - 3);
+            return string.Format("{0}.debug.js", scriptPrefix);
         }
 
         private static bool HasScriptAlreadyBeenAdded(string scriptToCheck, StringBuilder emittedScript)
