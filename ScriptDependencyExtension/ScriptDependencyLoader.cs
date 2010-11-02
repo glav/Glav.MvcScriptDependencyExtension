@@ -11,8 +11,9 @@ namespace ScriptDependencyExtension
 {
     internal class ScriptDependencyLoader
     {
-        private List<ScriptDependency> _knownDependencies = null;
-        public List<ScriptDependency> Dependencies { get { return _knownDependencies; } }
+        private ScriptDependencyContainer _dependencyContainer = new ScriptDependencyContainer();
+        public ScriptDependencyContainer DependencyContainer { get { return _dependencyContainer; } }
+
         private const string FILENAME = "ScriptDependencies.xml";
         private readonly string[] FILEPATHS = new string[] 
         {
@@ -64,7 +65,12 @@ namespace ScriptDependencyExtension
             var rootElement = xmlFile.Element("Dependencies");
             var dependencies = from e in rootElement.Elements("Dependency")
                                select e;
-            _knownDependencies = new List<ScriptDependency>();
+            var releaseSuffixEl = rootElement.Attribute("ReleaseSuffix");
+            var debugSuffixEl = rootElement.Attribute("DebugSuffix");
+            
+            _dependencyContainer.ReleaseSuffix = releaseSuffixEl != null ? releaseSuffixEl.Value : string.Empty;
+            _dependencyContainer.DebugSuffix = debugSuffixEl != null ? debugSuffixEl.Value : string.Empty;
+
             foreach (var dependency in dependencies)
             {
                 var scriptDependency = new ScriptDependency();
@@ -83,7 +89,7 @@ namespace ScriptDependencyExtension
                         names.ToList().ForEach(n => scriptDependency.RequiredDependencies.Add(n.Value.ToLowerInvariant()));
                     }
                 }
-                _knownDependencies.Add(scriptDependency);
+                _dependencyContainer.Dependencies.Add(scriptDependency);
             }
         }
 

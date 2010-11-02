@@ -52,6 +52,29 @@ namespace ScriptDependencyTests
         {
             var script = ScriptHelper.RequiresScript(ScriptName.AllScripts);
             Assert.IsTrue(script.ToString().Contains("src='/Scripts/jquery-1.4.1.js'"));
+            Assert.IsTrue(script.ToString().Contains("src='/Scripts/jquery.validate.js'"));
+            Assert.IsTrue(script.ToString().Contains("src='/Scripts/MicrosoftAjax.js'"));
+        }
+
+        [TestMethod]
+        [DeploymentItem("ScriptDependencies.xml")]
+        public void RequringAnEmptyScriptNameShouldReturnEmpty()
+        {
+            var script = ScriptHelper.RequiresScript(null);
+            Assert.IsNotNull(script);
+            Assert.AreEqual<MvcHtmlString>(MvcHtmlString.Empty, script);
+            
+            script = ScriptHelper.RequiresScript("");
+            Assert.IsNotNull(script);
+            Assert.AreEqual<MvcHtmlString>(MvcHtmlString.Empty, script);
+            
+            script = ScriptHelper.RequiresScript(string.Empty);
+            Assert.IsNotNull(script);
+            Assert.AreEqual<MvcHtmlString>(MvcHtmlString.Empty, script);
+
+            script = ScriptHelper.RequiresScript("   ");
+            Assert.IsNotNull(script);
+            Assert.AreEqual<MvcHtmlString>(MvcHtmlString.Empty, script);
         }
 
         [TestMethod]

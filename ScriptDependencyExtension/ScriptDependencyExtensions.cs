@@ -27,7 +27,20 @@ namespace ScriptDependencyExtension
 
         public static MvcHtmlString RequiresScript(string scriptName)
         {
+            if (string.IsNullOrWhiteSpace(scriptName))
+                return MvcHtmlString.Empty;
+
             StringBuilder emittedScript = new StringBuilder();
+
+            // If all scripts are specified, then make a call to the RequiresScripts passing in an array
+            // containing all the scripts we read in from the dependency file.
+            if (scriptName.ToLowerInvariant() == ScriptName.AllScripts)
+            {
+                List<string> allScripts = new List<string>();
+                _scriptLoader.DependencyContainer.Dependencies.ForEach(s => allScripts.Add(s.ScriptName));
+
+                return RequiresScripts(allScripts.ToArray());
+            }
 
             // First lets see if the required script has any dependencies and include them first
             GenerateDependencyScript(scriptName, emittedScript);
@@ -56,14 +69,14 @@ namespace ScriptDependencyExtension
 
         private static void GenerateDependencyScript(string scriptName, StringBuilder emittedScript)
         {
-            var dependency = _scriptLoader.Dependencies.SingleOrDefault(s => s.ScriptName.ToLowerInvariant() == scriptName.ToLowerInvariant());
+            var dependency = _scriptLoader.DependencyContainer.Dependencies.SingleOrDefault(s => s.ScriptName.ToLowerInvariant() == scriptName.ToLowerInvariant());
             if (dependency != null)
             {
                 if (dependency.RequiredDependencies != null && dependency.RequiredDependencies.Count > 0)
                 {
                     dependency.RequiredDependencies.ForEach(dependencyName =>
                     {
-                        var requiredDependency = _scriptLoader.Dependencies.Single(d => d.ScriptName == dependencyName.ToLowerInvariant());
+                        var requiredDependency = _scriptLoader.DependencyContainer.Dependencies.Single(d => d.ScriptName == dependencyName.ToLowerInvariant());
                         AddScriptToOutputBuffer(requiredDependency, emittedScript);
                         // Recursively hunt for script dependencies
                         GenerateDependencyScript(requiredDependency.ScriptName, emittedScript);

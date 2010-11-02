@@ -22,6 +22,6 @@ namespace ScriptDependencyExtension
         public const string MicrosoftMvcAjax = "Microsoft-Mvc-Ajax";
         public const string MicrosoftMvcValidation = "Microsoft-Mvc-Validation";
 
-        public const string AllScripts = "AllScripts";
+        public const string AllScripts = "allscripts";
     }
 }

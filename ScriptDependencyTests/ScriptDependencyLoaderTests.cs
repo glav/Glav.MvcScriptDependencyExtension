@@ -38,8 +38,9 @@ namespace ScriptDependencyTests
             Assert.IsFalse(string.IsNullOrWhiteSpace(loader.DependencyResourceFile));
 
             loader.LoadDependencies();
-            Assert.IsNotNull(loader.Dependencies);
-            Assert.IsTrue(loader.Dependencies.Count > 0);
+            Assert.IsNotNull(loader.DependencyContainer);
+            Assert.IsNotNull(loader.DependencyContainer.Dependencies);
+            Assert.IsTrue(loader.DependencyContainer.Dependencies.Count > 0);
         }
         [TestMethod]
         [ExpectedException(typeof(FileNotFoundException))]
