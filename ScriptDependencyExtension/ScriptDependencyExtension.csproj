@@ -46,14 +46,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Http\HttpContextAdapter.cs" />
-    <Compile Include="Http\HttpRequestAdapter.cs" />
     <Compile Include="Http\IHttpContext.cs" />
-    <Compile Include="Http\IHttpRequest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScriptDependency.cs" />
     <Compile Include="ScriptDependencyContainer.cs" />
     <Compile Include="ScriptDependencyExtensions.cs" />
     <Compile Include="ScriptDependencyLoader.cs" />
+    <Compile Include="ScriptState.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="ScriptDependencies.xml">

@@ -81,35 +81,55 @@ namespace ScriptDependencyTests
         [DeploymentItem("ScriptDependencies.xml")]
         public void ShouldOutputDebugVersionOfScript()
         {
-            var context = new MockContext("http://test:1234",".");
+            var context = new MockContext();
             context.HasValidWebContext = true;
             context.IsDebuggingEnabled = true;
             ScriptHelper.WebHttpContext = context;
 
             var script = ScriptHelper.RequiresScript(ScriptName.jQuery);
         }
+
+        [TestMethod]
+        [DeploymentItem("ScriptDependencies.xml")]
+        public void DebugScriptsShouldBeIncludedInDebugMode()
+        {
+            var mockContext = new MockContext();
+            mockContext.HasValidWebContext = true;
+            mockContext.IsDebuggingEnabled = true;
+            ScriptHelper.WebHttpContext = mockContext;
+
+            var script1 = ScriptHelper.RequiresScript(ScriptName.jQuery);
+
+            Assert.IsTrue(!string.IsNullOrWhiteSpace(script1.ToString()));
+            Assert.IsTrue(script1.ToString().Contains("/Scripts/jquery-1.4.1.debug.js'"));
+        }
+        [TestMethod]
+        [DeploymentItem("ScriptDependencies.xml")]
+        public void ReleaseScriptsShouldBeIncludedInDebugMode()
+        {
+            var mockContext = new MockContext();
+            mockContext.HasValidWebContext = true;
+            mockContext.IsDebuggingEnabled = false;
+            ScriptHelper.WebHttpContext = mockContext;
+
+            var script1 = ScriptHelper.RequiresScript(ScriptName.jQuery);
+
+            Assert.IsTrue(!string.IsNullOrWhiteSpace(script1.ToString()));
+            Assert.IsTrue(script1.ToString().Contains("/Scripts/jquery-1.4.1.min.js'"));
+        }
     }
+
 
     public class MockContext : IHttpContext
     {
-        public MockContext(string requestUrl, string requestAppPath)
-        {
-            Request = new MockRequest(requestUrl, requestAppPath);
-        }
-        public bool IsDebuggingEnabled {get; set;}
-        public IHttpRequest Request {get; set;}
-        public bool HasValidWebContext {get; set;}
+        public bool IsDebuggingEnabled { get; set; }
+        public bool HasValidWebContext { get; set; }
 
-        public class MockRequest : IHttpRequest
+        public string ResolveScriptRelativePath(string relativePath)
         {
-            public MockRequest(string requestUrl, string requestAppPath)
-            {
-                Url = new Uri(requestUrl);
-                ApplicationPath = requestAppPath;
-            }
-            public Uri Url  {get; set;}
-            public string ApplicationPath  {get; set;}
+            return relativePath.Replace("~", string.Empty);
         }
+
     }
 
 }

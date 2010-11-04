@@ -8,6 +8,8 @@ namespace ScriptDependencyExtension.Http
 {
     public class HttpContextAdapter : IHttpContext
     {
+        HttpContext _context;
+
         #region Constructors
         public HttpContextAdapter()
         {
@@ -18,7 +20,7 @@ namespace ScriptDependencyExtension.Http
             _hasValidWebContext = false;
             if (context != null)
             {
-                _request = new HttpRequestAdapter(context.Request);
+                _context = context;
                 _isDebuggingEnabled = context.IsDebuggingEnabled;
                 _hasValidWebContext = true;
             }
@@ -38,10 +40,18 @@ namespace ScriptDependencyExtension.Http
             get { return _isDebuggingEnabled; }
         }
 
-        IHttpRequest _request;
-        public IHttpRequest Request
+        public string ResolveScriptRelativePath(string relativePath)
         {
-            get { return _request; }
+            if (HasValidWebContext)
+            {
+                return relativePath.Replace("~", _context.Request.ApplicationPath).Replace("//", "/");
+            }
+            return ResolveRelativePathWithNoHttpContext(relativePath);
+        }
+
+        private string ResolveRelativePathWithNoHttpContext(string relativePath)
+        {
+            return relativePath.Replace("~", "");
         }
     }
 }

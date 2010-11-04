@@ -16,6 +16,7 @@ namespace ScriptDependencyExtension
     {
         private const string SCRIPT_INCLUDE = "<script type='text/javascript' src='{0}'></script>";
         private static ScriptDependencyLoader _scriptLoader = new ScriptDependencyLoader();
+        private const string JS_PREFIX = ".js";
 
         static ScriptHelper()
         {
@@ -23,7 +24,7 @@ namespace ScriptDependencyExtension
             WebHttpContext = new HttpContextAdapter(HttpContext.Current);
         }
 
-        public static IHttpContext WebHttpContext {get; set;}
+        public static IHttpContext WebHttpContext { get; set; }
 
         public static MvcHtmlString RequiresScript(string scriptName)
         {
@@ -42,7 +43,6 @@ namespace ScriptDependencyExtension
                 return RequiresScripts(allScripts.ToArray());
             }
 
-            // First lets see if the required script has any dependencies and include them first
             GenerateDependencyScript(scriptName, emittedScript);
 
             return MvcHtmlString.Create(emittedScript.ToString());
@@ -91,9 +91,9 @@ namespace ScriptDependencyExtension
 
         private static void AddScriptToOutputBuffer(ScriptDependency dependency, StringBuilder buffer)
         {
-            var resolvedPath = ResolveScriptRelativePath(dependency.ScriptPath);
+            var resolvedPath = WebHttpContext.ResolveScriptRelativePath(dependency.ScriptPath);
             var scriptNameBasedOnMode = DetermineScriptNameBasedOnDebugOrRelease(resolvedPath);
-            var fullScriptInclude = string.Format(SCRIPT_INCLUDE, resolvedPath);
+            var fullScriptInclude = string.Format(SCRIPT_INCLUDE, scriptNameBasedOnMode);
             if (!HasScriptAlreadyBeenAdded(fullScriptInclude, buffer))
             {
                 buffer.Append(fullScriptInclude);
@@ -104,22 +104,31 @@ namespace ScriptDependencyExtension
         {
             if (WebHttpContext.HasValidWebContext)
             {
-                bool scriptIsNamedForRelease = true;
-                
-                if (resolvedScriptPath.Length > 8)
+                ScriptState scriptState = ScriptState.Original;
+
+                var debugSuffix = string.Format("{0}.js",_scriptLoader.DependencyContainer.DebugSuffix);
+                if (resolvedScriptPath.Length > debugSuffix.Length )
                 {
-                    var scriptSuffix = resolvedScriptPath.Substring(resolvedScriptPath.Length - 8, 8);
-                    if (scriptSuffix == "debug.js")
-                        scriptIsNamedForRelease = false;
+                    var scriptSuffix = resolvedScriptPath.Substring(resolvedScriptPath.Length - debugSuffix.Length, debugSuffix.Length);
+                    if (scriptSuffix == debugSuffix )
+                        scriptState = ScriptState.Debug;
+                }
+
+                var releaseSuffix = string.Format("{0}.js", _scriptLoader.DependencyContainer.ReleaseSuffix);
+                if (resolvedScriptPath.Length > releaseSuffix.Length)
+                {
+                    var scriptSuffix = resolvedScriptPath.Substring(resolvedScriptPath.Length - releaseSuffix.Length, releaseSuffix.Length);
+                    if (scriptSuffix == releaseSuffix)
+                        scriptState = ScriptState.Release;
                 }
 
                 string actualScriptPath = null;
-                if (scriptIsNamedForRelease && WebHttpContext.IsDebuggingEnabled)
+                if (scriptState != ScriptState.Debug && WebHttpContext.IsDebuggingEnabled)
                     actualScriptPath = ChangeScriptNameToDebug(resolvedScriptPath);
-                if (!scriptIsNamedForRelease && !WebHttpContext.IsDebuggingEnabled)
+                if (scriptState != ScriptState.Release && !WebHttpContext.IsDebuggingEnabled)
                     actualScriptPath = ChangeScriptNameToRelease(resolvedScriptPath);
 
-                if (File.Exists(actualScriptPath))
+                if (!string.IsNullOrWhiteSpace(actualScriptPath))
                     return actualScriptPath;
 
                 return resolvedScriptPath;
@@ -130,42 +139,29 @@ namespace ScriptDependencyExtension
 
         private static string ChangeScriptNameToRelease(string resolvedScriptPath)
         {
-            var scriptPreffix = resolvedScriptPath.Substring(0,resolvedScriptPath.Length - 8);
-            return string.Format("{0}.js", scriptPreffix);
+            var scriptPreffix = resolvedScriptPath.Substring(0, resolvedScriptPath.Length - JS_PREFIX.Length);
+            if (string.IsNullOrWhiteSpace(_scriptLoader.DependencyContainer.ReleaseSuffix))
+                return resolvedScriptPath;
+            return string.Format("{0}.{1}.js", scriptPreffix,_scriptLoader.DependencyContainer.ReleaseSuffix);
         }
 
         private static string ChangeScriptNameToDebug(string resolvedScriptPath)
         {
-            var scriptPrefix = resolvedScriptPath.Substring(0, resolvedScriptPath.Length - 3);
-            return string.Format("{0}.debug.js", scriptPrefix);
+            var scriptPrefix = resolvedScriptPath.Substring(0, resolvedScriptPath.Length - JS_PREFIX.Length);
+            if (string.IsNullOrWhiteSpace(_scriptLoader.DependencyContainer.DebugSuffix))
+                return resolvedScriptPath;
+            
+            return string.Format("{0}.{1}.js", scriptPrefix, _scriptLoader.DependencyContainer.DebugSuffix);
         }
 
         private static bool HasScriptAlreadyBeenAdded(string scriptToCheck, StringBuilder emittedScript)
         {
             var existingScript = emittedScript.ToString().ToLowerInvariant();
-            return (existingScript.Contains(scriptToCheck.ToLowerInvariant())); 
+            return (existingScript.Contains(scriptToCheck.ToLowerInvariant()));
         }
 
 
 
-        private static string ResolveScriptRelativePath(string relativePath)
-        {
-            if (WebHttpContext.HasValidWebContext)
-            {
-                if (relativePath.StartsWith("~"))
-                {
-                    var url = WebHttpContext.Request.Url;
-                    var newPath = (WebHttpContext.Request.ApplicationPath + relativePath.Substring(1)).Replace("//", "/");
-                    string newUrl = string.Format("{0}://{1}{2}{3}",
-                                                        url.Scheme,
-                                                        url.Host,
-                                                        url.IsDefaultPort ? string.Empty : string.Format(":{0}", url.Port.ToString()),
-                                                        newPath);
-                    return newUrl;
-                }
-            }
-            return relativePath.Replace("~", "");
-        }
 
     }
 }

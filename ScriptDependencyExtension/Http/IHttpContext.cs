@@ -8,8 +8,8 @@ namespace ScriptDependencyExtension.Http
     public interface IHttpContext
     {
         bool IsDebuggingEnabled { get; }
-        IHttpRequest Request { get; }
         bool HasValidWebContext { get; }
+        string ResolveScriptRelativePath(string relativePath);
 
     }
 }
