@@ -10,6 +10,7 @@ namespace ScriptDependencyExtension
         public string ScriptName { get; set; }
         public string ScriptPath { get; set; }
         public List<string> RequiredDependencies { get; set;  }
+        public ScriptType TypeOfScript { get; set; }
     }
 
     public class ScriptName
@@ -23,5 +24,11 @@ namespace ScriptDependencyExtension
         public const string MicrosoftMvcValidation = "Microsoft-Mvc-Validation";
 
         public const string AllScripts = "allscripts";
+    }
+
+    public enum ScriptType
+    {
+        Javascript,
+        CSS
     }
 }
