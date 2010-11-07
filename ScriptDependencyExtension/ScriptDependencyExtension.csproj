@@ -52,6 +52,7 @@
     <Compile Include="ScriptDependencyContainer.cs" />
     <Compile Include="ScriptDependencyExtensions.cs" />
     <Compile Include="ScriptDependencyLoader.cs" />
+    <Compile Include="ScriptName.cs" />
     <Compile Include="ScriptState.cs" />
   </ItemGroup>
   <ItemGroup>
