@@ -6,6 +6,7 @@ using System.IO;
 using System.Xml;
 using System.Xml.Linq;
 using System.Web;
+using ScriptDependencyExtension.Constants;
 
 namespace ScriptDependencyExtension
 {

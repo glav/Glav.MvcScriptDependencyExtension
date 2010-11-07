@@ -103,6 +103,7 @@ namespace ScriptDependencyTests
             Assert.IsTrue(!string.IsNullOrWhiteSpace(script1.ToString()));
             Assert.IsTrue(script1.ToString().Contains("/Scripts/jquery-1.4.1.debug.js'"));
         }
+
         [TestMethod]
         [DeploymentItem("ScriptDependencies.xml")]
         public void ReleaseScriptsShouldBeIncludedInDebugMode()
@@ -116,6 +117,37 @@ namespace ScriptDependencyTests
 
             Assert.IsTrue(!string.IsNullOrWhiteSpace(script1.ToString()));
             Assert.IsTrue(script1.ToString().Contains("/Scripts/jquery-1.4.1.min.js'"));
+        }
+        
+        [TestMethod]
+        [DeploymentItem("ScriptDependencies.xml")]
+        public void ShouldFindAtLeastOneCSSDependency()
+        {
+            var mockContext = new MockContext();
+            mockContext.HasValidWebContext = true;
+            mockContext.IsDebuggingEnabled = false;
+            ScriptHelper.WebHttpContext = mockContext;
+
+            var script1 = ScriptHelper.RequiresScript(ScriptName.MicrosoftMvcValidation);
+
+            Assert.IsTrue(!string.IsNullOrWhiteSpace(script1.ToString()));
+            Assert.IsTrue(script1.ToString().Contains("/Content/Site.css'"));
+        }
+        
+        [TestMethod]
+        [DeploymentItem("ScriptDependencies.xml")]
+        public void ShouldFindTwoCssDependencies()
+        {
+            var mockContext = new MockContext();
+            mockContext.HasValidWebContext = true;
+            mockContext.IsDebuggingEnabled = false;
+            ScriptHelper.WebHttpContext = mockContext;
+
+            var script1 = ScriptHelper.RequiresScript("PageSpecificStyle");
+
+            Assert.IsTrue(!string.IsNullOrWhiteSpace(script1.ToString()));
+            Assert.IsTrue(script1.ToString().Contains("/Content/Site.css'"));
+            Assert.IsTrue(script1.ToString().Contains("/Content/Page.css'"));
         }
     }
 

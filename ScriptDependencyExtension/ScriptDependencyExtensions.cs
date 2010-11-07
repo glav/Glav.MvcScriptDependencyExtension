@@ -9,14 +9,13 @@ using System.Web;
 using System.Threading;
 using System.IO;
 using ScriptDependencyExtension.Http;
+using ScriptDependencyExtension.Constants;
 
 namespace ScriptDependencyExtension
 {
     public static class ScriptHelper
     {
-        private const string SCRIPT_INCLUDE = "<script type='text/javascript' src='{0}'></script>";
         private static ScriptDependencyLoader _scriptLoader = new ScriptDependencyLoader();
-        private const string JS_PREFIX = ".js";
 
         static ScriptHelper()
         {
@@ -91,9 +90,17 @@ namespace ScriptDependencyExtension
 
         private static void AddScriptToOutputBuffer(ScriptDependency dependency, StringBuilder buffer)
         {
+            string fullScriptInclude;
             var resolvedPath = WebHttpContext.ResolveScriptRelativePath(dependency.ScriptPath);
-            var scriptNameBasedOnMode = DetermineScriptNameBasedOnDebugOrRelease(resolvedPath);
-            var fullScriptInclude = string.Format(SCRIPT_INCLUDE, scriptNameBasedOnMode);
+            if (dependency.TypeOfScript == ScriptType.CSS)
+            {
+                fullScriptInclude = string.Format(ScriptHelperConstants.CSSInclude, resolvedPath);
+            }
+            else
+            {
+                var scriptNameBasedOnMode = DetermineScriptNameBasedOnDebugOrRelease(resolvedPath);
+                fullScriptInclude = string.Format(ScriptHelperConstants.ScriptInclude, scriptNameBasedOnMode);
+            }
             if (!HasScriptAlreadyBeenAdded(fullScriptInclude, buffer))
             {
                 buffer.Append(fullScriptInclude);
@@ -139,7 +146,7 @@ namespace ScriptDependencyExtension
 
         private static string ChangeScriptNameToRelease(string resolvedScriptPath)
         {
-            var scriptPreffix = resolvedScriptPath.Substring(0, resolvedScriptPath.Length - JS_PREFIX.Length);
+            var scriptPreffix = resolvedScriptPath.Substring(0, resolvedScriptPath.Length - ScriptHelperConstants.JSPrefix.Length);
             if (string.IsNullOrWhiteSpace(_scriptLoader.DependencyContainer.ReleaseSuffix))
                 return resolvedScriptPath;
             return string.Format("{0}.{1}.js", scriptPreffix,_scriptLoader.DependencyContainer.ReleaseSuffix);
@@ -147,7 +154,7 @@ namespace ScriptDependencyExtension
 
         private static string ChangeScriptNameToDebug(string resolvedScriptPath)
         {
-            var scriptPrefix = resolvedScriptPath.Substring(0, resolvedScriptPath.Length - JS_PREFIX.Length);
+            var scriptPrefix = resolvedScriptPath.Substring(0, resolvedScriptPath.Length - ScriptHelperConstants.JSPrefix.Length);
             if (string.IsNullOrWhiteSpace(_scriptLoader.DependencyContainer.DebugSuffix))
                 return resolvedScriptPath;
             

@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constants\ScriptHelperConstants.cs" />
     <Compile Include="Http\HttpContextAdapter.cs" />
     <Compile Include="Http\IHttpContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -54,7 +55,7 @@
     <Compile Include="ScriptDependencyLoader.cs" />
     <Compile Include="ScriptName.cs" />
     <Compile Include="ScriptState.cs" />
-    <Compile Include="XmlConstants.cs" />
+    <Compile Include="Constants\XmlConstants.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="ScriptDependencies.xml">

@@ -42,6 +42,7 @@ namespace ScriptDependencyTests
             Assert.IsNotNull(loader.DependencyContainer.Dependencies);
             Assert.IsTrue(loader.DependencyContainer.Dependencies.Count > 0);
         }
+        
         [TestMethod]
         [ExpectedException(typeof(FileNotFoundException))]
         public void LoaderShouldThrowIfNoDependenciesFound()

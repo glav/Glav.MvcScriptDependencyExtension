@@ -44,4 +44,11 @@
     <ScriptFile>~/Content/Site.css</ScriptFile>
   </Dependency>
 
+  <Dependency Name="PageSpecificStyle" Type="css">
+    <ScriptFile>~/Content/Page.css</ScriptFile>
+    <RequiredDependencies>
+      <Name>SiteWideStyle</Name>
+    </RequiredDependencies>
+  </Dependency>
+
 </Dependencies>
