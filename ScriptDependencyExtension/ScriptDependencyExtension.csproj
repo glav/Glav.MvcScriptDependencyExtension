@@ -54,6 +54,7 @@
     <Compile Include="ScriptDependencyLoader.cs" />
     <Compile Include="ScriptName.cs" />
     <Compile Include="ScriptState.cs" />
+    <Compile Include="XmlConstants.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="ScriptDependencies.xml">

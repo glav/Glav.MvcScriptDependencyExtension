@@ -62,26 +62,48 @@ namespace ScriptDependencyExtension
                 return;
 
             var xmlFile = XDocument.Load(filename);
-            var rootElement = xmlFile.Element("Dependencies");
-            var dependencies = from e in rootElement.Elements("Dependency")
+            var rootElement = xmlFile.Element(XmlConstants.DependenciesNode);
+            var dependencies = from e in rootElement.Elements(XmlConstants.DependencyNode)
                                select e;
-            var releaseSuffixEl = rootElement.Attribute("ReleaseSuffix");
-            var debugSuffixEl = rootElement.Attribute("DebugSuffix");
+            var releaseSuffixEl = rootElement.Attribute(XmlConstants.ReleaseSuffixAttribute);
+            var debugSuffixEl = rootElement.Attribute(XmlConstants.DebugSuffixAttribute);
             
             _dependencyContainer.ReleaseSuffix = releaseSuffixEl != null ? releaseSuffixEl.Value : string.Empty;
             _dependencyContainer.DebugSuffix = debugSuffixEl != null ? debugSuffixEl.Value : string.Empty;
 
+            ExtractDependencies(dependencies);
+        }
+
+        private void ExtractDependencies(IEnumerable<XElement> dependencies)
+        {
             foreach (var dependency in dependencies)
             {
                 var scriptDependency = new ScriptDependency();
-                scriptDependency.ScriptName = dependency.Attribute("Name").Value.ToLowerInvariant();
-                var file = dependency.Element("ScriptFile");
+                var nameAttrib = dependency.Attribute(XmlConstants.NameAttribute);
+                if (nameAttrib != null)
+                {
+                    scriptDependency.ScriptName = nameAttrib.Value.ToLowerInvariant();
+                }
+
+                var typeAttrib = dependency.Attribute(XmlConstants.TypeAttribute);
+                if (typeAttrib != null)
+                {
+                    scriptDependency.TypeOfScript = ScriptType.Javascript;
+                    if (typeAttrib.Value.ToLowerInvariant() == XmlConstants.CSSTypeValue)
+                    {
+                        scriptDependency.TypeOfScript = ScriptType.CSS;
+                    }
+                }
+
+                var file = dependency.Element(XmlConstants.ScriptFileElement);
                 if (file != null)
+                {
                     scriptDependency.ScriptPath = file.Value;
-                var requiredDependencies = dependency.Element("RequiredDependencies");
+                }
+                var requiredDependencies = dependency.Element(XmlConstants.RequiredDependenciesNode);
                 if (requiredDependencies != null)
                 {
-                    var names = from rd in requiredDependencies.Elements("Name")
+                    var names = from rd in requiredDependencies.Elements(XmlConstants.NameElement)
                                 select rd;
                     if (names.Count() > 0)
                     {
