@@ -1,0 +1,21 @@
+﻿<%@ Page Language="C#" Inherits="System.Web.Mvc.ViewPage<dynamic>" %>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>Index</title>
+    <%= ScriptHelper.RequiresScript("HomeStyle") %>
+</head>
+<body>
+    <div>
+    <%= ScriptHelper.RequiresScript(ScriptName.jqueryValidateUnobtrusive) %>
+
+<h2><%: View.Message%></h2>
+<p class="intro">
+    To learn more about ASP.NET MVC visit <a href="http://asp.net/mvc" title="ASP.NET MVC Website">http://asp.net/mvc</a>.
+</p>
+    
+    </div>
+</body>
+</html>
