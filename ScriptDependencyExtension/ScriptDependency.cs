@@ -14,9 +14,4 @@ namespace ScriptDependencyExtension
     }
 
 
-    public enum ScriptType
-    {
-        Javascript,
-        CSS
-    }
 }

@@ -6,6 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ScriptDependencyExtension;
 using System.Web.Mvc;
 using ScriptDependencyExtension.Http;
+using ScriptDependencyExtension.Constants;
 
 namespace ScriptDependencyTests
 {
