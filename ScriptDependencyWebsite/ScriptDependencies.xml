@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<Dependencies ReleaseSuffix="min" DebugSuffix="debug">
+<Dependencies ReleaseSuffix="min" DebugSuffix="">
 
   <Dependency Name="jQuery-validate-unobtrusive" Type="js">
     <ScriptFile>~/Scripts/jquery.validate.unobtrusive.js</ScriptFile>
@@ -44,5 +44,11 @@
     <ScriptFile>~/Content/Site.css</ScriptFile>
   </Dependency>
 
+  <Dependency Name="HomeStyle" Type="css">
+    <ScriptFile>~/Content/Home.css</ScriptFile>
+    <RequiredDependencies>
+      <Name>SiteWideStyle</Name>
+    </RequiredDependencies>
+  </Dependency>
 
 </Dependencies>
