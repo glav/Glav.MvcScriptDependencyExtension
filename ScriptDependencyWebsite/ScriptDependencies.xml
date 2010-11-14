@@ -36,7 +36,14 @@
     <RequiredDependencies>
       <Name>Microsoft-Ajax</Name>
       <Name>Microsoft-Mvc-Ajax</Name>
-      <Name>SiteWideStyle</Name>
+    </RequiredDependencies>
+  </Dependency>
+
+  <Dependency Name="All" Type="js">
+    <ScriptFile>~/Scripts/MicrosoftMvcValidation.js</ScriptFile>
+    <RequiredDependencies>
+      <Name>Microsoft-Mvc-Validation</Name>
+      <Name>jQuery-validate-unobtrusive</Name>
     </RequiredDependencies>
   </Dependency>
 
