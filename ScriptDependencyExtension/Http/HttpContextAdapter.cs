@@ -42,16 +42,22 @@ namespace ScriptDependencyExtension.Http
 
         public string ResolveScriptRelativePath(string relativePath)
         {
-            if (HasValidWebContext)
+            if (HasValidWebContext && !string.IsNullOrWhiteSpace(relativePath))
             {
-                return relativePath.Replace("~", _context.Request.ApplicationPath).Replace("//", "/");
-            }
+                var relReplace = relativePath.Replace("~", _context.Request.ApplicationPath);
+                if (!string.IsNullOrWhiteSpace(relReplace))
+                    return relReplace.Replace("//", "/");
+                return relReplace;
+            }   
             return ResolveRelativePathWithNoHttpContext(relativePath);
         }
 
         private string ResolveRelativePathWithNoHttpContext(string relativePath)
         {
-            return relativePath.Replace("~", "");
+            if (!string.IsNullOrWhiteSpace(relativePath))
+                return relativePath.Replace("~", "");
+
+            return relativePath;
         }
     }
 }

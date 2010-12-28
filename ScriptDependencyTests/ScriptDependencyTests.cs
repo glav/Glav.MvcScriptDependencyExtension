@@ -150,6 +150,21 @@ namespace ScriptDependencyTests
             Assert.IsTrue(script1.ToString().Contains("/Content/Site.css'"));
             Assert.IsTrue(script1.ToString().Contains("/Content/Page.css'"));
         }
+        
+        [TestMethod]
+        [DeploymentItem("ScriptDependencies.xml")]
+        public void SHouldNotThrowIfNoScriptFilePresentInDependency()
+        {
+            var script1 = ScriptHelper.RequiresScripts("no-file");
+
+            Assert.IsTrue(!string.IsNullOrWhiteSpace(script1.ToString()));
+            Assert.IsTrue(script1.ToString().Contains("src='/Scripts/jquery-1.4.1.js'"));
+
+            Assert.IsTrue(script1.ToString().Contains("src='/Scripts/jquery-1.4.1.js'"));
+            Assert.IsTrue(script1.ToString().Contains("src='/Scripts/jquery.validate.js'"));
+            Assert.IsTrue(script1.ToString().Contains("src='/Scripts/MicrosoftMvcAjax.js'"));
+            Assert.IsTrue(script1.ToString().Contains("src='/Scripts/MicrosoftAjax.js'"));
+        }
     }
 
 

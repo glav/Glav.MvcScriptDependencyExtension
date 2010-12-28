@@ -9,6 +9,12 @@
     </RequiredDependencies>
   </Dependency>
 
+  <Dependency Name="no-file" Type="js">
+    <RequiredDependencies>
+      <Name>jquery</Name>
+    </RequiredDependencies>
+  </Dependency>
+
   <Dependency Name="jQuery-validate" Type="js">
     <ScriptFile>~/Scripts/jquery.validate.js</ScriptFile>
     <RequiredDependencies>

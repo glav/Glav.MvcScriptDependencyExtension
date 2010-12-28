@@ -90,7 +90,7 @@ namespace ScriptDependencyExtension
 
         private static void AddScriptToOutputBuffer(ScriptDependency dependency, StringBuilder buffer)
         {
-            string fullScriptInclude;
+            string fullScriptInclude = null;
             var resolvedPath = WebHttpContext.ResolveScriptRelativePath(dependency.ScriptPath);
             if (dependency.TypeOfScript == ScriptType.CSS)
             {
@@ -99,22 +99,26 @@ namespace ScriptDependencyExtension
             else
             {
                 var scriptNameBasedOnMode = DetermineScriptNameBasedOnDebugOrRelease(resolvedPath);
-                fullScriptInclude = string.Format(ScriptHelperConstants.ScriptInclude, scriptNameBasedOnMode);
+                if (!string.IsNullOrWhiteSpace(scriptNameBasedOnMode))
+                    fullScriptInclude = string.Format(ScriptHelperConstants.ScriptInclude, scriptNameBasedOnMode);
             }
-            if (!HasScriptAlreadyBeenAdded(fullScriptInclude, buffer))
+            if (!string.IsNullOrWhiteSpace(fullScriptInclude) && !HasScriptAlreadyBeenAdded(fullScriptInclude, buffer))
             {
                 buffer.Append(fullScriptInclude);
             }
         }
 
-        private static object DetermineScriptNameBasedOnDebugOrRelease(string resolvedScriptPath)
+        private static string DetermineScriptNameBasedOnDebugOrRelease(string resolvedScriptPath)
         {
+            if (string.IsNullOrWhiteSpace(resolvedScriptPath))
+                return null;
+
             if (WebHttpContext.HasValidWebContext)
             {
                 ScriptState scriptState = ScriptState.Original;
 
                 var debugSuffix = string.Format("{0}.js",_scriptLoader.DependencyContainer.DebugSuffix);
-                if (resolvedScriptPath.Length > debugSuffix.Length )
+                if (!string.IsNullOrWhiteSpace(debugSuffix) && resolvedScriptPath.Length > debugSuffix.Length )
                 {
                     var scriptSuffix = resolvedScriptPath.Substring(resolvedScriptPath.Length - debugSuffix.Length, debugSuffix.Length);
                     if (scriptSuffix == debugSuffix )
@@ -122,7 +126,7 @@ namespace ScriptDependencyExtension
                 }
 
                 var releaseSuffix = string.Format("{0}.js", _scriptLoader.DependencyContainer.ReleaseSuffix);
-                if (resolvedScriptPath.Length > releaseSuffix.Length)
+                if (!string.IsNullOrWhiteSpace(releaseSuffix) && resolvedScriptPath.Length > releaseSuffix.Length)
                 {
                     var scriptSuffix = resolvedScriptPath.Substring(resolvedScriptPath.Length - releaseSuffix.Length, releaseSuffix.Length);
                     if (scriptSuffix == releaseSuffix)
