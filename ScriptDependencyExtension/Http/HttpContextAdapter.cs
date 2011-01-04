@@ -59,5 +59,11 @@ namespace ScriptDependencyExtension.Http
 
             return relativePath;
         }
+
+
+        public System.Collections.IDictionary PerRequestItemCache
+        {
+            get { return _context.Items; }
+        }
     }
 }
