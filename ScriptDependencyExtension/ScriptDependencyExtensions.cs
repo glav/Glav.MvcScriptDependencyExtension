@@ -90,7 +90,12 @@ namespace ScriptDependencyExtension
 
         private static void AddScriptToOutputBuffer(ScriptDependency dependency, StringBuilder buffer)
         {
+            // If its already been added as part of this request, then dont add it in.
+            if (WebHttpContext.PerRequestItemCache.Contains(dependency.ScriptName))
+                return;
+
             string fullScriptInclude = null;
+            
             var resolvedPath = WebHttpContext.ResolveScriptRelativePath(dependency.ScriptPath);
             if (dependency.TypeOfScript == ScriptType.CSS)
             {
@@ -105,6 +110,7 @@ namespace ScriptDependencyExtension
             if (!string.IsNullOrWhiteSpace(fullScriptInclude) && !HasScriptAlreadyBeenAdded(fullScriptInclude, buffer))
             {
                 buffer.Append(fullScriptInclude);
+                WebHttpContext.PerRequestItemCache.Add(dependency.ScriptName, fullScriptInclude);
             }
         }
 
