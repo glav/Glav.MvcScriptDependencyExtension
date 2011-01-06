@@ -15,6 +15,8 @@ namespace ScriptDependencyExtension
         private ScriptDependencyContainer _dependencyContainer = new ScriptDependencyContainer();
         public ScriptDependencyContainer DependencyContainer { get { return _dependencyContainer; } }
 
+        private static object _lockObject = new object();
+
         private const string FILENAME = "ScriptDependencies.xml";
         private readonly string[] FILEPATHS = new string[] 
         {
@@ -118,8 +120,19 @@ namespace ScriptDependencyExtension
 
         internal void Initialise()
         {
-            FindDependencyFile();
-            LoadDependencies();
+            if (_dependencyContainer.Dependencies.Count > 0)
+                return;
+
+            lock (_lockObject)
+            {
+                if (_dependencyContainer.Dependencies.Count == 0)
+                {
+                    FindDependencyFile();
+                    LoadDependencies();
+
+                }
+            }
         }
+
     }
 }

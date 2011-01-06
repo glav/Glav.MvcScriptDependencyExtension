@@ -13,20 +13,29 @@ using ScriptDependencyExtension.Constants;
 
 namespace ScriptDependencyExtension
 {
-    public static class ScriptHelper
+    public class ScriptHelper
     {
         private static ScriptDependencyLoader _scriptLoader = new ScriptDependencyLoader();
 
-        static ScriptHelper()
+        public ScriptHelper(IHttpContext context)
         {
             _scriptLoader.Initialise();
-            WebHttpContext = new HttpContextAdapter(HttpContext.Current);
+            WebHttpContext = context;
         }
 
-        public static IHttpContext WebHttpContext { get; set; }
+        public IHttpContext WebHttpContext { get; set; }
 
         public static MvcHtmlString RequiresScript(string scriptName)
         {
+            if (HttpContext.Current == null)
+                throw new ArgumentNullException("HttpContext is NULL or not available");
+
+            return RequiresScript(new HttpContextAdapter(HttpContext.Current), scriptName);
+        }
+        internal static MvcHtmlString RequiresScript(IHttpContext context, string scriptName)
+        {
+            ScriptHelper helper = new ScriptHelper(context);
+
             if (string.IsNullOrWhiteSpace(scriptName))
                 return MvcHtmlString.Empty;
 
@@ -39,16 +48,26 @@ namespace ScriptDependencyExtension
                 List<string> allScripts = new List<string>();
                 _scriptLoader.DependencyContainer.Dependencies.ForEach(s => allScripts.Add(s.ScriptName));
 
-                return RequiresScripts(allScripts.ToArray());
+                return RequiresScripts(context,allScripts.ToArray());
             }
 
-            GenerateDependencyScript(scriptName, emittedScript);
+            helper.GenerateDependencyScript(scriptName, emittedScript);
 
             return MvcHtmlString.Create(emittedScript.ToString());
         }
 
         public static MvcHtmlString RequiresScripts(params string[] scriptNames)
         {
+            if (HttpContext.Current == null)
+                throw new ArgumentNullException("HttpContext is NULL or not available");
+
+            return RequiresScripts(new HttpContextAdapter(HttpContext.Current), scriptNames);
+        }
+
+        internal static MvcHtmlString RequiresScripts(IHttpContext context, params string[] scriptNames)
+        {
+            ScriptHelper helper = new ScriptHelper(context);
+
             // Use this to register multiple scripts and prevent multiple entries of base script like
             // jQuery core.
             StringBuilder emittedScript = new StringBuilder();
@@ -59,14 +78,14 @@ namespace ScriptDependencyExtension
                 foreach (var scriptName in scriptNames)
                 {
                     if (!string.IsNullOrWhiteSpace(scriptName))
-                        GenerateDependencyScript(scriptName, emittedScript);
+                        helper.GenerateDependencyScript(scriptName, emittedScript);
                 }
             }
 
             return MvcHtmlString.Create(emittedScript.ToString());
         }
 
-        private static void GenerateDependencyScript(string scriptName, StringBuilder emittedScript)
+        private void GenerateDependencyScript(string scriptName, StringBuilder emittedScript)
         {
             var dependency = _scriptLoader.DependencyContainer.Dependencies.SingleOrDefault(s => s.ScriptName.ToLowerInvariant() == scriptName.ToLowerInvariant());
             if (dependency != null)
@@ -88,7 +107,7 @@ namespace ScriptDependencyExtension
             }
         }
 
-        private static void AddScriptToOutputBuffer(ScriptDependency dependency, StringBuilder buffer)
+        private void AddScriptToOutputBuffer(ScriptDependency dependency, StringBuilder buffer)
         {
             // If its already been added as part of this request, then dont add it in.
             if (WebHttpContext.PerRequestItemCache.Contains(dependency.ScriptName))
@@ -114,7 +133,7 @@ namespace ScriptDependencyExtension
             }
         }
 
-        private static string DetermineScriptNameBasedOnDebugOrRelease(string resolvedScriptPath)
+        private string DetermineScriptNameBasedOnDebugOrRelease(string resolvedScriptPath)
         {
             if (string.IsNullOrWhiteSpace(resolvedScriptPath))
                 return null;
