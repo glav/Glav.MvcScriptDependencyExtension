@@ -57,4 +57,19 @@
     </RequiredDependencies>
   </Dependency>
 
+  <Dependency Name="ScriptOrderTest" Type="js">
+    <ScriptFile>~/Content/HighLevelScript.js</ScriptFile>
+    <RequiredDependencies>
+      <Name>ScriptOrderTest_First</Name>
+      <Name>ScriptOrderTest_Second</Name>
+    </RequiredDependencies>
+  </Dependency>
+
+  <Dependency Name="ScriptOrderTest_First" Type="js">
+    <ScriptFile>~/Content/Script1.js</ScriptFile>
+  </Dependency>
+  <Dependency Name="ScriptOrderTest_Second" Type="js">
+    <ScriptFile>~/Content/Script2.js</ScriptFile>
+  </Dependency>
+
 </Dependencies>

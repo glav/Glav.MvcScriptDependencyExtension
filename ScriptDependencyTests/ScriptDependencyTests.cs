@@ -194,6 +194,33 @@ namespace ScriptDependencyTests
             Assert.IsTrue(script1.ToString().Contains("src='/Scripts/jquery-1.4.1.min.js'"));
 
         }
+
+        [TestMethod]
+        [DeploymentItem("ScriptDependencies.xml")]
+        public void ScriptsShouldRenderInCorrectOrder()
+        {
+            var mockContext = new MockContext();
+            mockContext.HasValidWebContext = true;
+            mockContext.IsDebuggingEnabled = false;
+
+            var script = ScriptHelper.RequiresScripts(mockContext, "ScriptOrderTest");
+
+            // Make sure the scripts are in there
+            Assert.IsTrue(!string.IsNullOrWhiteSpace(script.ToString()));
+            Assert.IsTrue(script.ToString().Contains("HighLevelScript"));
+            Assert.IsTrue(script.ToString().Contains("Script1"));
+            Assert.IsTrue(script.ToString().Contains("Script2"));
+
+            //Now assert their order
+            int posHighLevel = script.ToString().IndexOf("HighLevelScript");
+            int posScript1 = script.ToString().IndexOf("Script1");
+            int posScript2 = script.ToString().IndexOf("Script2");
+
+            Assert.IsTrue(posHighLevel > posScript2);
+            Assert.IsTrue(posScript2 > posScript1);
+
+        }
+
     }
 
 

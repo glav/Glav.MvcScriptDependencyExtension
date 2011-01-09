@@ -95,9 +95,9 @@ namespace ScriptDependencyExtension
                     dependency.RequiredDependencies.ForEach(dependencyName =>
                     {
                         var requiredDependency = _scriptLoader.DependencyContainer.Dependencies.Single(d => d.ScriptName == dependencyName.ToLowerInvariant());
-                        AddScriptToOutputBuffer(requiredDependency, emittedScript);
                         // Recursively hunt for script dependencies
                         GenerateDependencyScript(requiredDependency.ScriptName, emittedScript);
+                        AddScriptToOutputBuffer(requiredDependency, emittedScript);
                     });
                 }
                 if (!string.IsNullOrWhiteSpace(dependency.ScriptPath))
