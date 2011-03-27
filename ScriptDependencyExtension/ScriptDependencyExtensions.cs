@@ -124,7 +124,7 @@ namespace ScriptDependencyExtension
             {
                 var scriptNameBasedOnMode = DetermineScriptNameBasedOnDebugOrRelease(resolvedPath);
                 if (!string.IsNullOrWhiteSpace(scriptNameBasedOnMode))
-                    fullScriptInclude = string.Format(ScriptHelperConstants.ScriptInclude, scriptNameBasedOnMode);
+                    fullScriptInclude = string.Format(ScriptHelperConstants.ScriptInclude, scriptNameBasedOnMode, _scriptLoader.DependencyContainer.ScriptVersion);
             }
             if (!string.IsNullOrWhiteSpace(fullScriptInclude) && !HasScriptAlreadyBeenAdded(fullScriptInclude, buffer))
             {
