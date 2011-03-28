@@ -16,7 +16,8 @@ namespace ScriptDependencyExtension.Constants
         public const string TypeAttribute = "Type";
         public const string DebugSuffixAttribute = "DebugSuffix";
         public const string ReleaseSuffixAttribute = "ReleaseSuffix";
-    	public const string ScriptVersionIdentifierAttribute = "VersionIdentifier";
+    	public const string ResourceVersionIdentifierAttribute = "VersionIdentifier";
+		public const string VersionMonikerQueryStringName = "VersionMonikerQueryStringName";
 
         public const string CSSTypeValue = "css";
 

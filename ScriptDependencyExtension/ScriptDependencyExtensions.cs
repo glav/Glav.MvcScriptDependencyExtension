@@ -207,13 +207,17 @@ namespace ScriptDependencyExtension
 			var resolvedPath = WebHttpContext.ResolveScriptRelativePath(dependency.ScriptPath);
 			if (dependency.TypeOfScript == ScriptType.CSS)
 			{
-				fullScriptInclude = string.Format(ScriptHelperConstants.CSSInclude, resolvedPath,_scriptLoader.DependencyContainer.VersionIdentifier);
+				fullScriptInclude = string.Format(ScriptHelperConstants.CSSInclude, resolvedPath,
+						_scriptLoader.DependencyContainer.VersionMonikerQueryStringName,
+						_scriptLoader.DependencyContainer.VersionIdentifier);
 			}
 			else
 			{
 				var scriptNameBasedOnMode = DetermineScriptNameBasedOnDebugOrRelease(resolvedPath);
 				if (!string.IsNullOrWhiteSpace(scriptNameBasedOnMode))
-					fullScriptInclude = string.Format(ScriptHelperConstants.ScriptInclude, scriptNameBasedOnMode, _scriptLoader.DependencyContainer.VersionIdentifier);
+					fullScriptInclude = string.Format(ScriptHelperConstants.ScriptInclude, scriptNameBasedOnMode,
+							_scriptLoader.DependencyContainer.VersionMonikerQueryStringName,
+							_scriptLoader.DependencyContainer.VersionIdentifier);
 			}
 			if (!string.IsNullOrWhiteSpace(fullScriptInclude) && !HasScriptAlreadyBeenAdded(fullScriptInclude, buffer))
 			{

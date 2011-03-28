@@ -14,7 +14,7 @@ namespace ScriptDependencyTests
     [TestClass]
     public class ScriptDependencyTests
     {
-    	private const string VERSION_QUERY_STRING = "?version=123";
+    	private const string VERSION_QUERY_STRING = "?v=123";
 
         [TestMethod]
         [DeploymentItem("ScriptDependencies.xml")]
