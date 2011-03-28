@@ -14,6 +14,8 @@ namespace ScriptDependencyTests
     [TestClass]
     public class ScriptDependencyTests
     {
+    	private const string VERSION_QUERY_STRING = "?version=123";
+
         [TestMethod]
         [DeploymentItem("ScriptDependencies.xml")]
         public void MultipleScriptsShouldBeLoadedFromASingleDelcaration()
@@ -25,13 +27,13 @@ namespace ScriptDependencyTests
             var script1 = ScriptHelper.RequiresScript(context,ScriptName.jQuery);
 
             Assert.IsTrue(!string.IsNullOrWhiteSpace(script1.ToString()));
-            Assert.IsTrue(script1.ToString().Contains("src='/Scripts/jquery-1.4.1.debug.js'"));
+            Assert.IsTrue(script1.ToString().Contains("src='/Scripts/jquery-1.4.1.debug.js" + VERSION_QUERY_STRING));
 
             var script2 = ScriptHelper.RequiresScript(context,ScriptName.jqueryValidateUnobtrusive);
 
             Assert.IsTrue(!string.IsNullOrWhiteSpace(script2.ToString()));
-            Assert.IsTrue(script2.ToString().Contains("src='/Scripts/jquery.validate.debug.js'"));
-            Assert.IsTrue(script2.ToString().Contains("src='/Scripts/jquery.validate.unobtrusive.debug.js'"));
+			Assert.IsTrue(script2.ToString().Contains("src='/Scripts/jquery.validate.debug.js" + VERSION_QUERY_STRING));
+			Assert.IsTrue(script2.ToString().Contains("src='/Scripts/jquery.validate.unobtrusive.debug.js" + VERSION_QUERY_STRING));
         }
 
         [TestMethod]
@@ -47,12 +49,12 @@ namespace ScriptDependencyTests
                                                         ScriptName.jQueryValidate);
 
             Assert.IsTrue(!string.IsNullOrWhiteSpace(script1.ToString()));
-            Assert.IsTrue(script1.ToString().Contains("src='/Scripts/jquery-1.4.1.debug.js'"));
+			Assert.IsTrue(script1.ToString().Contains("src='/Scripts/jquery-1.4.1.debug.js" + VERSION_QUERY_STRING));
 
-            Assert.IsTrue(script1.ToString().Contains("src='/Scripts/jquery-1.4.1.debug.js'"));
-            Assert.IsTrue(script1.ToString().Contains("src='/Scripts/jquery.validate.debug.js'"));
-            Assert.IsTrue(script1.ToString().Contains("src='/Scripts/MicrosoftMvcAjax.debug.js'"));
-            Assert.IsTrue(script1.ToString().Contains("src='/Scripts/MicrosoftAjax.debug.js'"));
+			Assert.IsTrue(script1.ToString().Contains("src='/Scripts/jquery-1.4.1.debug.js" + VERSION_QUERY_STRING));
+			Assert.IsTrue(script1.ToString().Contains("src='/Scripts/jquery.validate.debug.js" + VERSION_QUERY_STRING));
+			Assert.IsTrue(script1.ToString().Contains("src='/Scripts/MicrosoftMvcAjax.debug.js" + VERSION_QUERY_STRING));
+			Assert.IsTrue(script1.ToString().Contains("src='/Scripts/MicrosoftAjax.debug.js" + VERSION_QUERY_STRING));
         }
 
         [TestMethod]
@@ -64,9 +66,9 @@ namespace ScriptDependencyTests
             context.IsDebuggingEnabled = true;
 
             var script = ScriptHelper.RequiresScript(context, ScriptName.AllScripts);
-            Assert.IsTrue(script.ToString().Contains("src='/Scripts/jquery-1.4.1.debug.js'"));
-            Assert.IsTrue(script.ToString().Contains("src='/Scripts/jquery.validate.debug.js'"));
-            Assert.IsTrue(script.ToString().Contains("src='/Scripts/MicrosoftAjax.debug.js'"));
+			Assert.IsTrue(script.ToString().Contains("src='/Scripts/jquery-1.4.1.debug.js" + VERSION_QUERY_STRING));
+			Assert.IsTrue(script.ToString().Contains("src='/Scripts/jquery.validate.debug.js" + VERSION_QUERY_STRING));
+			Assert.IsTrue(script.ToString().Contains("src='/Scripts/MicrosoftAjax.debug.js" + VERSION_QUERY_STRING));
         }
 
         [TestMethod]
@@ -116,7 +118,7 @@ namespace ScriptDependencyTests
             var script1 = ScriptHelper.RequiresScript(mockContext, ScriptName.jQuery);
 
             Assert.IsTrue(!string.IsNullOrWhiteSpace(script1.ToString()));
-            Assert.IsTrue(script1.ToString().Contains("/Scripts/jquery-1.4.1.debug.js'"));
+			Assert.IsTrue(script1.ToString().Contains("/Scripts/jquery-1.4.1.debug.js" + VERSION_QUERY_STRING));
         }
 
         [TestMethod]
@@ -130,7 +132,7 @@ namespace ScriptDependencyTests
             var script1 = ScriptHelper.RequiresScript(mockContext, ScriptName.jQuery);
 
             Assert.IsTrue(!string.IsNullOrWhiteSpace(script1.ToString()));
-            Assert.IsTrue(script1.ToString().Contains("/Scripts/jquery-1.4.1.min.js'"));
+			Assert.IsTrue(script1.ToString().Contains("/Scripts/jquery-1.4.1.min.js" + VERSION_QUERY_STRING));
         }
         
         [TestMethod]
@@ -144,7 +146,7 @@ namespace ScriptDependencyTests
             var script1 = ScriptHelper.RequiresScript(mockContext, ScriptName.MicrosoftMvcValidation);
 
             Assert.IsTrue(!string.IsNullOrWhiteSpace(script1.ToString()));
-            Assert.IsTrue(script1.ToString().Contains("/Content/Site.css'"));
+			Assert.IsTrue(script1.ToString().Contains("/Content/Site.css" + VERSION_QUERY_STRING));
         }
         
         [TestMethod]
@@ -158,8 +160,8 @@ namespace ScriptDependencyTests
             var script1 = ScriptHelper.RequiresScript(mockContext, "PageSpecificStyle");
 
             Assert.IsTrue(!string.IsNullOrWhiteSpace(script1.ToString()));
-            Assert.IsTrue(script1.ToString().Contains("/Content/Site.css'"));
-            Assert.IsTrue(script1.ToString().Contains("/Content/Page.css'"));
+			Assert.IsTrue(script1.ToString().Contains("/Content/Site.css" + VERSION_QUERY_STRING));
+			Assert.IsTrue(script1.ToString().Contains("/Content/Page.css" + VERSION_QUERY_STRING));
         }
 
         [TestMethod]
@@ -174,7 +176,7 @@ namespace ScriptDependencyTests
             var script2 = ScriptHelper.RequiresScript(mockContext, ScriptName.jQuery);
 
             Assert.IsTrue(!string.IsNullOrWhiteSpace(script1.ToString()));
-            Assert.IsTrue(script1.ToString().Contains("/Scripts/jquery-1.4.1.min.js'"));
+			Assert.IsTrue(script1.ToString().Contains("/Scripts/jquery-1.4.1.min.js" + VERSION_QUERY_STRING));
 
             // jQuery has already been included so it should return empty and not include it again
             Assert.IsTrue(string.IsNullOrWhiteSpace(script2.ToString()));
@@ -191,7 +193,7 @@ namespace ScriptDependencyTests
             var script1 = ScriptHelper.RequiresScripts(mockContext, "no-file");
 
             Assert.IsTrue(!string.IsNullOrWhiteSpace(script1.ToString()));
-            Assert.IsTrue(script1.ToString().Contains("src='/Scripts/jquery-1.4.1.min.js'"));
+			Assert.IsTrue(script1.ToString().Contains("src='/Scripts/jquery-1.4.1.min.js" + VERSION_QUERY_STRING));
 
         }
 
