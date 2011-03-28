@@ -49,13 +49,23 @@ namespace ScriptDependencyExtension
 				realExtension.Append(fileExtension);
 			}
 
-			var nameBuilder = new StringBuilder();
-			foreach (var filename in _filesToCombine)
-			{
-				nameBuilder.Append(filename);
-			}
 			//TODO: Cannot use hashcode here as it uses different numbers for same filenames but different instances
-			return string.Format("Resource-{0}.combined{1}", nameBuilder.GetHashCode(),realExtension.ToString());
+			string moniker = GenerateUniqueMonikerBasedOnFileNames(_filesToCombine);
+			return string.Format("Resource-{0}.combined{1}", moniker, realExtension.ToString());
+		}
+
+		private string GenerateUniqueMonikerBasedOnFileNames(IEnumerable<string> filesToCombine)
+		{
+			Decimal nameValue = 0;
+			foreach (var filename in filesToCombine)
+			{
+				var unicodeBytes = System.Text.UnicodeEncoding.Unicode.GetBytes(filename);
+				for (int pos = 0; pos < unicodeBytes.Length; pos++ )
+				{
+					nameValue += ((int) unicodeBytes[pos]) * (pos+1);
+				}
+			}
+			return nameValue.ToString();
 		}
 
 		private string CombineFileContents()

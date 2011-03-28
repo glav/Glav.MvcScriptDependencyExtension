@@ -34,27 +34,32 @@ namespace ScriptDependencyTests
 		[DeploymentItem("TestFile2.txt")]
 		public void ShouldGenerateUniqueCombinedFileNames()
 		{
-			var fileCombiner1 = new FileCombiner(new HttpContextAdapter(), new string[] { "TestFile1.txt", "TestFile2.txt" });
-			var fileCombiner2 = new FileCombiner(new HttpContextAdapter(), new string[] { "TestFile1.txt" });
-			var fileCombiner3 = new FileCombiner(new HttpContextAdapter(), new string[] { "TestFile2.txt" });
-			var fileCombiner4 = new FileCombiner(new HttpContextAdapter(), new string[] { "TestFile1.txt", "TestFile2.txt" });
-			var result1 = fileCombiner1.CombineFiles("js");
-			var result2 = fileCombiner2.CombineFiles("js");
-			var result3 = fileCombiner3.CombineFiles("js");
-			var result4 = fileCombiner4.CombineFiles("js");
+			var fileCombiner_Test1AndTest2 = new FileCombiner(new HttpContextAdapter(), new string[] { "TestFile1.txt", "TestFile2.txt" });
+			var fileCombiner_Test1 = new FileCombiner(new HttpContextAdapter(), new string[] { "TestFile1.txt" });
+			var fileCombiner_Test2 = new FileCombiner(new HttpContextAdapter(), new string[] { "TestFile2.txt" });
+			var fileCombiner_Test1AndTest2Copy = new FileCombiner(new HttpContextAdapter(), new string[] { "TestFile1.txt", "TestFile2.txt" });
+			var fileCombiner_Test2Copy = new FileCombiner(new HttpContextAdapter(), new string[] { "TestFile2.txt" }); 
 
-			Assert.IsNotNull(result1);
-			Assert.IsNotNull(result2);
-			Assert.IsNotNull(result3);
-			Assert.IsNotNull(result4);
+			var result_Test1AndTest2 = fileCombiner_Test1AndTest2.CombineFiles("js");
+			var result_Test1 = fileCombiner_Test1.CombineFiles("js");
+			var result_Test2 = fileCombiner_Test2.CombineFiles("js");
+			var result_Test1AndTest2Copy = fileCombiner_Test1AndTest2Copy.CombineFiles("js");
+			var result_Test2Copy = fileCombiner_Test2Copy.CombineFiles("js");
 
-			Assert.AreNotEqual<string>(result1.CombinedFileName, result2.CombinedFileName);
-			Assert.AreNotEqual<string>(result1.CombinedFileName, result3.CombinedFileName);
-			Assert.AreNotEqual<string>(result2.CombinedFileName, result3.CombinedFileName);
+			Assert.IsNotNull(result_Test1AndTest2);
+			Assert.IsNotNull(result_Test1);
+			Assert.IsNotNull(result_Test2);
+			Assert.IsNotNull(result_Test1AndTest2Copy);
+			Assert.IsNotNull(result_Test2Copy);
+
+			Assert.AreNotEqual<string>(result_Test1AndTest2.CombinedFileName, result_Test1.CombinedFileName);
+			Assert.AreNotEqual<string>(result_Test1AndTest2.CombinedFileName, result_Test2.CombinedFileName);
+			Assert.AreNotEqual<string>(result_Test1.CombinedFileName, result_Test2.CombinedFileName);
 
 			// These instances combined exactly the same content so the combined file names should
 			// be the same.
-			Assert.AreEqual<string>(result1.CombinedFileName,result4.CombinedFileName);
+			Assert.AreEqual<string>(result_Test1AndTest2.CombinedFileName,result_Test1AndTest2Copy.CombinedFileName);
+			Assert.AreEqual<string>(result_Test2.CombinedFileName, result_Test2Copy.CombinedFileName);
 		}
 	}
 }
