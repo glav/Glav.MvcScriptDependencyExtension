@@ -18,16 +18,26 @@ namespace ScriptDependencyExtension
 		string DependencyResourceFile { get; set; }
 		void LoadDependencies();
 		void LoadDependencies(string filename);
-		void Initialise(IHttpContext context);
+		void Initialise();
 	}
 
 	internal class ScriptDependencyLoader : IScriptDependencyLoader
 	{
-        private ScriptDependencyContainer _dependencyContainer = new ScriptDependencyContainer();
+		public ScriptDependencyLoader() { }
+		public ScriptDependencyLoader(IHttpContext context)
+		{
+			if (context == null)
+				throw new ArgumentNullException("HttpContext cannot be NULL");
+			
+			_httpContext = context;
+		}
+		#region properties
+
+		private ScriptDependencyContainer _dependencyContainer = new ScriptDependencyContainer();
         public ScriptDependencyContainer DependencyContainer { get { return _dependencyContainer; } }
 
         private static object _lockObject = new object();
-    	private IHttpContext _httppContext;
+    	private IHttpContext _httpContext;
 
         private const string FILENAME = "ScriptDependencies.xml";
         private readonly string[] FILEPATHS = new string[] 
@@ -46,8 +56,11 @@ namespace ScriptDependencyExtension
         };
 
         public string DependencyResourceFile { get; set; }
+		
+		#endregion
 
-        internal void FindDependencyFile()
+
+		internal void FindDependencyFile()
         {
             // look in well known locations for a script dependency file
             foreach (var dirPath in FILEPATHS)
@@ -138,12 +151,11 @@ namespace ScriptDependencyExtension
                 }
                 _dependencyContainer.Dependencies.Add(scriptDependency);
             }
-			_httppContext.AddItemToGlobalCache(ScriptHelperConstants.CacheKey_ScriptDependencies,_dependencyContainer.Dependencies);
+			_httpContext.AddItemToGlobalCache(ScriptHelperConstants.CacheKey_ScriptDependencies,_dependencyContainer.Dependencies);
         }
 
-		public void Initialise(IHttpContext context)
+		public void Initialise()
         {
-        	_httppContext = context;
             if (_dependencyContainer.Dependencies.Count > 0)
                 return;
 

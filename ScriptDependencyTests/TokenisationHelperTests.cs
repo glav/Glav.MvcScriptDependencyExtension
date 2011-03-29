@@ -27,7 +27,7 @@ namespace ScriptDependencyTests
 		[TestMethod]
 		public void ShouldenerateDependencyNamesFromTokens()
 		{
-			List<ScriptDependency> dependencies = new List<ScriptDependency>();
+			ScriptDependencyContainer container = new ScriptDependencyContainer();
 			var tokenHelper = new TokenisationHelper();
 
 			var dep1 = new ScriptDependency();
@@ -38,18 +38,18 @@ namespace ScriptDependencyTests
 			dep2.ScriptName = "two";
 			dep2.ScriptNameToken = tokenHelper.TokeniseString(dep2.ScriptName);
 			
-			dependencies.Add(dep1);
-			dependencies.Add(dep2);
+			container.Dependencies.Add(dep1);
+			container.Dependencies.Add(dep2);
 
-			var queryString = tokenHelper.GenerateQueryStringRequestForDependencyNames(dependencies.Select(d => d.ScriptNameToken).ToArray());
+			var queryString = tokenHelper.GenerateQueryStringRequestForDependencyNames(container.Dependencies.Select(d => d.ScriptName).ToArray());
 
 			var helper = new TokenisationHelper();
-			var list = helper.GetListOfDependencyNamesFromQueryStringTokens(queryString);
+			var list = helper.GetListOfDependencyNamesFromQueryStringTokens(queryString,container);
 
 			Assert.IsNotNull(list);
 			Assert.IsTrue(list.Count == 2);
-			Assert.AreEqual<string>("one", list[0]);
-			Assert.AreEqual<string>("two", list[0]);
+			Assert.AreEqual<string>("one", list[0].ScriptName);
+			Assert.AreEqual<string>("two", list[1].ScriptName);
 		}
 	}
 }

@@ -33,7 +33,7 @@ namespace ScriptDependencyTests
         [DeploymentItem("ScriptDependencies.xml")]
         public void LoaderShouldLoadDependenciesFromFile()
         {
-            ScriptDependencyLoader loader = new ScriptDependencyLoader();
+        	ScriptDependencyLoader loader = new ScriptDependencyLoader(new MockContext());
             loader.FindDependencyFile();
             Assert.IsFalse(string.IsNullOrWhiteSpace(loader.DependencyResourceFile));
 

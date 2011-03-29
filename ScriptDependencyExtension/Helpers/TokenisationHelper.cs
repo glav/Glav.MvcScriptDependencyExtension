@@ -55,9 +55,42 @@ namespace ScriptDependencyExtension.Helpers
 		/// </summary>
 		/// <param name="queryString"></param>
 		/// <returns></returns>
-		public List<string> GetListOfDependencyNamesFromQueryStringTokens(string queryString)
+		public List<ScriptDependency> GetListOfDependencyNamesFromQueryStringTokens(string queryString, ScriptDependencyContainer scriptContainer)
 		{
-			throw new NotImplementedException();
+			List<ScriptDependency> dependencyNames = new List<ScriptDependency>();
+			var tokenList = ParseQueryStringForTokens(queryString);
+			tokenList.ForEach(t =>
+			                  	{
+			                  		var dep = scriptContainer.Dependencies.Find(s => s.ScriptNameToken == t);
+									if (dep != null)
+									{
+										dependencyNames.Add(dep);
+									}
+			                  	});
+			return dependencyNames;
+		}
+
+		private List<string> ParseQueryStringForTokens(string queryString)
+		{
+			List<string> tokens = new List<string>();
+			if (!string.IsNullOrWhiteSpace(queryString) && queryString.Length > 3)
+			{
+				var queryStringIdentifier = string.Format("?{0}=", ScriptHelperConstants.CombinedScriptQueryStringIdentifier);
+				int pos = queryStringIdentifier.IndexOf(queryStringIdentifier);
+				if (pos >= 0)
+				{
+					pos += queryStringIdentifier.Length;
+					int endPos = queryString.LastIndexOf("&");
+					if (endPos <0)
+					{
+						endPos = queryString.Length - 1;
+					}
+					var tokenQueryStringContents = queryString.Substring(pos, (endPos - (pos-1)));
+					var arrayOfTokens = tokenQueryStringContents.Split(',');
+					tokens.AddRange(arrayOfTokens);
+				}
+			}
+			return tokens;
 		}
 	}
 

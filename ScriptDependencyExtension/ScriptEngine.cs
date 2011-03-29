@@ -10,6 +10,7 @@ namespace ScriptDependencyExtension
 {
 	public class ScriptEngine
 	{
+
 		private IHttpContext _httpContext;
 		private IScriptDependencyLoader _scriptLoader;
 
@@ -104,6 +105,12 @@ namespace ScriptDependencyExtension
 
 		}
 
+		/// <summary>
+		/// This method will either gather the list of dependencies for a script name and
+		/// then ask it to be added to the output
+		/// </summary>
+		/// <param name="scriptName"></param>
+		/// <param name="emittedScript"></param>
 		public void GenerateDependencyScript(string scriptName, StringBuilder emittedScript)
 		{
 			var dependency = _scriptLoader.DependencyContainer.FindDependency(scriptName);
@@ -127,6 +134,13 @@ namespace ScriptDependencyExtension
 			}
 		}
 
+		/// <summary>
+		/// This method actually formats the script and adds it to the buffer or
+		/// (if combine scripts is on), adds it to the list of scripts to be combined in the
+		/// per request cache
+		/// </summary>
+		/// <param name="dependency"></param>
+		/// <param name="buffer"></param>
 		public void AddScriptToOutputBuffer(ScriptDependency dependency, StringBuilder buffer)
 		{
 			// If its already been added as part of this request, then dont add it in.

@@ -15,11 +15,10 @@ namespace ScriptDependencyExtension
 {
 	public class ScriptHelper
 	{
-		private static IScriptDependencyLoader _scriptLoader = new ScriptDependencyLoader();
+		private static IScriptDependencyLoader _scriptLoader;
 
 		public ScriptHelper(IHttpContext context)
 		{
-			_scriptLoader.Initialise(context);
 			WebHttpContext = context;
 		}
 
@@ -30,6 +29,14 @@ namespace ScriptDependencyExtension
 
 		#endregion
 
+		private static void InitScriptLoader(IHttpContext context)
+		{
+			if (_scriptLoader == null)
+			{
+				_scriptLoader = new ScriptDependencyLoader(context);
+				_scriptLoader.Initialise();
+			}
+		}
 		#region RequiresScript Helper methods
 
 		public static MvcHtmlString RequiresScript(string scriptName)
@@ -43,6 +50,8 @@ namespace ScriptDependencyExtension
 		{
 			if (string.IsNullOrWhiteSpace(scriptName))
 				return MvcHtmlString.Empty;
+
+			InitScriptLoader(context);
 
 			StringBuilder emittedScript = new StringBuilder();
 
@@ -69,6 +78,8 @@ namespace ScriptDependencyExtension
 
 		internal static MvcHtmlString RequiresScripts(IHttpContext context, params string[] scriptNames)
 		{
+			InitScriptLoader(context);
+			
 			ScriptEngine engine = new ScriptEngine(context, _scriptLoader);
 			// Use this to register multiple scripts and prevent multiple entries of base script like
 			// jQuery core.
@@ -120,7 +131,9 @@ namespace ScriptDependencyExtension
 
 		internal static void RequiresScriptsDeferred(IHttpContext context, params string[] scriptNames)
 		{
-			ScriptEngine engine = new ScriptEngine(context,_scriptLoader);
+			InitScriptLoader(context);
+
+			ScriptEngine engine = new ScriptEngine(context, _scriptLoader);
 
 			// First lets see if the required script has any dependencies and include them first
 			if (scriptNames != null && scriptNames.Length > 0)
@@ -143,7 +156,9 @@ namespace ScriptDependencyExtension
 
 		internal static MvcHtmlString RenderDeferredScripts(IHttpContext context)
 		{
-			ScriptEngine engine = new ScriptEngine(context,_scriptLoader);
+			InitScriptLoader(context);
+
+			ScriptEngine engine = new ScriptEngine(context, _scriptLoader);
 
 			return MvcHtmlString.Create(engine.RenderDeferredScriptsToBuffer());
 
