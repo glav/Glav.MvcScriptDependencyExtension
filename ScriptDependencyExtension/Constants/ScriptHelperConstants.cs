@@ -16,5 +16,7 @@ namespace ScriptDependencyExtension.Constants
 		public const string CacheKey_JSFilesToCombineList = "ScriptCombineList-JS";
 		public const string CacheKey_CSSFilesToCombineList = "ScriptCombineList-CSS";
 		public const string CacheKey_ScriptDependencies = "ScriptDependencies";
+
+		public const string CombinedScriptQueryStringIdentifier = "scrptcmb";
     }
 }

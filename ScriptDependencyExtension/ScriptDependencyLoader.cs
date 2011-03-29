@@ -107,7 +107,7 @@ namespace ScriptDependencyExtension
                 if (nameAttrib != null)
                 {
                     scriptDependency.ScriptName = nameAttrib.Value.ToLowerInvariant();
-                	scriptDependency.ScriptNameToken = tokenHelper.TokeniseFileName(scriptDependency.ScriptName);
+                	scriptDependency.ScriptNameToken = tokenHelper.TokeniseString(scriptDependency.ScriptName);
                 }
 
                 var typeAttrib = dependency.Attribute(XmlConstants.TypeAttribute);

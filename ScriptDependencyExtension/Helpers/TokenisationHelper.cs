@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ScriptDependencyExtension.Constants;
 
 namespace ScriptDependencyExtension.Helpers
 {
 	public class TokenisationHelper
 	{
-		public string TokeniseFileName(string filename)
+		public string TokeniseString(string filename)
 		{
 			Decimal nameValue = 0;
 			if (!string.IsNullOrWhiteSpace(filename))
@@ -27,11 +28,11 @@ namespace ScriptDependencyExtension.Helpers
 		/// Where the numbers represent unique tokens for each script dependency name
 		/// </summary>
 		/// <returns></returns>
-		public string GenerateQueryStringRequestForFiles(IEnumerable<string> dependenciesToCombine)
+		public string GenerateQueryStringRequestForDependencyNames(IEnumerable<string> dependenciesToCombine)
 		{
 			var queryString = new StringBuilder();
 			var fileHelper = new TokenisationHelper();
-			foreach (var filename in dependenciesToCombine)
+			foreach (var dependencyName in dependenciesToCombine)
 			{
 				if (queryString.Length > 0)
 				{
@@ -39,14 +40,25 @@ namespace ScriptDependencyExtension.Helpers
 				}
 				else
 				{
-					queryString.Append("?c=");
+					queryString.AppendFormat("?{0}=", ScriptHelperConstants.CombinedScriptQueryStringIdentifier);
 				}
-				var tokenForFilename = fileHelper.TokeniseFileName(filename);
+				var tokenForFilename = fileHelper.TokeniseString(dependencyName);
 				queryString.Append(tokenForFilename);
 			}
 
 			return queryString.ToString();
 		}
 
+		/// <summary>
+		/// Takes a query string (as rendered by a script combine request) and generates the script dependencies names
+		/// it represents
+		/// </summary>
+		/// <param name="queryString"></param>
+		/// <returns></returns>
+		public List<string> GetListOfDependencyNamesFromQueryStringTokens(string queryString)
+		{
+			throw new NotImplementedException();
+		}
 	}
+
 }
