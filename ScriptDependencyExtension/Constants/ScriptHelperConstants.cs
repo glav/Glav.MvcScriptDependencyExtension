@@ -13,5 +13,8 @@ namespace ScriptDependencyExtension.Constants
 
 		public const string ErrorMessage_NoHttpContextAvailable = "HttpContext is NULL or not available";
 
+		public const string CacheKey_JSFilesToCombineList = "ScriptCombineList-JS";
+		public const string CacheKey_CSSFilesToCombineList = "ScriptCombineList-CSS";
+		public const string CacheKey_ScriptDependencies = "ScriptDependencies";
     }
 }

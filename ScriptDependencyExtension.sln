@@ -19,6 +19,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dependencies", "Dependencie
 		Dependencies\AjaxMin.dll = Dependencies\AjaxMin.dll
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScriptDependencyExtension.Handler", "ScriptDependencyExtension.Handler\ScriptDependencyExtension.Handler.csproj", "{11AF28FC-5449-4922-89A8-800AC2A5F3C1}"
+EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = ScriptDependencyExtension.vsmdi
@@ -40,6 +42,10 @@ Global
 		{22210BAC-BFBC-4229-B4DC-C775A7899800}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{22210BAC-BFBC-4229-B4DC-C775A7899800}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{22210BAC-BFBC-4229-B4DC-C775A7899800}.Release|Any CPU.Build.0 = Release|Any CPU
+		{11AF28FC-5449-4922-89A8-800AC2A5F3C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{11AF28FC-5449-4922-89A8-800AC2A5F3C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{11AF28FC-5449-4922-89A8-800AC2A5F3C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{11AF28FC-5449-4922-89A8-800AC2A5F3C1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -18,15 +18,14 @@ namespace ScriptDependencyTests
 		public void ShouldCombineFiles()
 		{
 			var fileCombiner = new FileCombiner(new HttpContextAdapter(), new string[] {"TestFile1.txt", "TestFile2.txt"});
-			var result = fileCombiner.CombineFiles("js");
+			var result = fileCombiner.CombineFiles();
 
 			Assert.IsNotNull(result);
-			Assert.IsFalse(string.IsNullOrWhiteSpace(result.CmbinedFileContents));
-			Assert.IsFalse(string.IsNullOrWhiteSpace(result.CombinedFileName));
+			Assert.IsFalse(string.IsNullOrWhiteSpace(result));
 
 			// Make sure it contains the combined contents
-			Assert.IsTrue(result.CmbinedFileContents.Contains("This is testfile 1"));
-			Assert.IsTrue(result.CmbinedFileContents.Contains("This is testfile 2"));
+			Assert.IsTrue(result.Contains("This is testfile 1"));
+			Assert.IsTrue(result.Contains("This is testfile 2"));
 		}
 		
 		[TestMethod]
@@ -40,11 +39,11 @@ namespace ScriptDependencyTests
 			var fileCombiner_Test1AndTest2Copy = new FileCombiner(new HttpContextAdapter(), new string[] { "TestFile1.txt", "TestFile2.txt" });
 			var fileCombiner_Test2Copy = new FileCombiner(new HttpContextAdapter(), new string[] { "TestFile2.txt" }); 
 
-			var result_Test1AndTest2 = fileCombiner_Test1AndTest2.CombineFiles("js");
-			var result_Test1 = fileCombiner_Test1.CombineFiles("js");
-			var result_Test2 = fileCombiner_Test2.CombineFiles("js");
-			var result_Test1AndTest2Copy = fileCombiner_Test1AndTest2Copy.CombineFiles("js");
-			var result_Test2Copy = fileCombiner_Test2Copy.CombineFiles("js");
+			var result_Test1AndTest2 = fileCombiner_Test1AndTest2.CombineFiles();
+			var result_Test1 = fileCombiner_Test1.CombineFiles();
+			var result_Test2 = fileCombiner_Test2.CombineFiles();
+			var result_Test1AndTest2Copy = fileCombiner_Test1AndTest2Copy.CombineFiles();
+			var result_Test2Copy = fileCombiner_Test2Copy.CombineFiles();
 
 			Assert.IsNotNull(result_Test1AndTest2);
 			Assert.IsNotNull(result_Test1);
@@ -52,14 +51,14 @@ namespace ScriptDependencyTests
 			Assert.IsNotNull(result_Test1AndTest2Copy);
 			Assert.IsNotNull(result_Test2Copy);
 
-			Assert.AreNotEqual<string>(result_Test1AndTest2.CombinedFileName, result_Test1.CombinedFileName);
-			Assert.AreNotEqual<string>(result_Test1AndTest2.CombinedFileName, result_Test2.CombinedFileName);
-			Assert.AreNotEqual<string>(result_Test1.CombinedFileName, result_Test2.CombinedFileName);
+			Assert.AreNotEqual<string>(result_Test1AndTest2, result_Test1);
+			Assert.AreNotEqual<string>(result_Test1AndTest2, result_Test2);
+			Assert.AreNotEqual<string>(result_Test1, result_Test2);
 
 			// These instances combined exactly the same content so the combined file names should
 			// be the same.
-			Assert.AreEqual<string>(result_Test1AndTest2.CombinedFileName,result_Test1AndTest2Copy.CombinedFileName);
-			Assert.AreEqual<string>(result_Test2.CombinedFileName, result_Test2Copy.CombinedFileName);
+			Assert.AreEqual<string>(result_Test1AndTest2,result_Test1AndTest2Copy);
+			Assert.AreEqual<string>(result_Test2, result_Test2Copy);
 		}
 	}
 }

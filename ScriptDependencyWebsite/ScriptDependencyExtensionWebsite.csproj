@@ -119,6 +119,10 @@
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ScriptDependencyExtension.Handler\ScriptDependencyExtension.Handler.csproj">
+      <Project>{11AF28FC-5449-4922-89A8-800AC2A5F3C1}</Project>
+      <Name>ScriptDependencyExtension.Handler</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ScriptDependencyExtension\ScriptDependencyExtension.csproj">
       <Project>{16DFCCF3-87E8-4706-ADF9-EA66CE40E204}</Project>
       <Name>ScriptDependencyExtension</Name>
@@ -141,7 +145,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>53044</DevelopmentServerPort>
+          <DevelopmentServerPort>55006</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>
           </IISUrl>

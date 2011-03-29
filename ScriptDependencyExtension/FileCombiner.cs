@@ -27,47 +27,7 @@ namespace ScriptDependencyExtension
 				_filesToCombine.Add(filename);
 		}
 
-		public FileCombinationResult CombineFiles(string fileExtension)
-		{
-			var result = new FileCombinationResult();
-
-			result.CmbinedFileContents = CombineFileContents();
-			result.CombinedFileName = GenerateFileName(fileExtension);
-
-			return result;
-		}
-
-		private string GenerateFileName(string fileExtension)
-		{
-			var realExtension = new StringBuilder();
-			if (!string.IsNullOrWhiteSpace(fileExtension))
-			{
-				if (fileExtension[0] != '.')
-				{
-					realExtension.Append('.');
-				}
-				realExtension.Append(fileExtension);
-			}
-
-			string moniker = GenerateUniqueMonikerBasedOnFileNames(_filesToCombine);
-			return string.Format("Resource-{0}.combined{1}", moniker, realExtension.ToString());
-		}
-
-		private string GenerateUniqueMonikerBasedOnFileNames(IEnumerable<string> filesToCombine)
-		{
-			Decimal nameValue = 0;
-			foreach (var filename in filesToCombine)
-			{
-				var unicodeBytes = System.Text.UnicodeEncoding.Unicode.GetBytes(filename);
-				for (int pos = 0; pos < unicodeBytes.Length; pos++ )
-				{
-					nameValue += ((int) unicodeBytes[pos]) * (pos+1);
-				}
-			}
-			return nameValue.ToString();
-		}
-
-		private string CombineFileContents()
+		public string CombineFiles()
 		{
 			var fileContents = new StringBuilder();
 			foreach (var filename in _filesToCombine)
@@ -79,9 +39,4 @@ namespace ScriptDependencyExtension
 		}
 	}
 
-	public class FileCombinationResult
-	{
-		public string CombinedFileName { get; set; }
-		public string CmbinedFileContents { get; set; }
-	}
 }

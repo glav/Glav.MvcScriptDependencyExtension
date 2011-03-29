@@ -8,6 +8,7 @@ namespace ScriptDependencyExtension
     public class ScriptDependency
     {
         public string ScriptName { get; set; }
+		public string ScriptNameToken { get; set; }
         public string ScriptPath { get; set; }
         public List<string> RequiredDependencies { get; set;  }
         public ScriptType TypeOfScript { get; set; }

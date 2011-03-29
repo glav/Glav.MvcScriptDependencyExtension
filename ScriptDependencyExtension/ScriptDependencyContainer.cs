@@ -16,4 +16,13 @@ namespace ScriptDependencyExtension
         private List<ScriptDependency> _knownDependencies = new List<ScriptDependency>();
         public List<ScriptDependency> Dependencies { get { return _knownDependencies; } }
     }
+
+	public static class ScriptDependencyContainerExtensions
+	{
+		public static ScriptDependency FindDependency(this ScriptDependencyContainer container, string scriptName )
+		{
+			var dependency = container.Dependencies.SingleOrDefault(s => s.ScriptName.ToLowerInvariant() == scriptName.ToLowerInvariant());
+			return dependency;
+		}
+	}
 }

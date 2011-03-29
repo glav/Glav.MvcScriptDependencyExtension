@@ -7,6 +7,7 @@ using System.Xml;
 using System.Xml.Linq;
 using System.Web;
 using ScriptDependencyExtension.Constants;
+using ScriptDependencyExtension.Http;
 
 namespace ScriptDependencyExtension
 {
@@ -16,6 +17,7 @@ namespace ScriptDependencyExtension
         public ScriptDependencyContainer DependencyContainer { get { return _dependencyContainer; } }
 
         private static object _lockObject = new object();
+    	private IHttpContext _httppContext;
 
         private const string FILENAME = "ScriptDependencies.xml";
         private readonly string[] FILEPATHS = new string[] 
@@ -87,6 +89,7 @@ namespace ScriptDependencyExtension
 
         private void ExtractDependencies(IEnumerable<XElement> dependencies)
         {
+        	var tokenHelper = new TokenisationHelper();
             foreach (var dependency in dependencies)
             {
                 var scriptDependency = new ScriptDependency();
@@ -94,6 +97,7 @@ namespace ScriptDependencyExtension
                 if (nameAttrib != null)
                 {
                     scriptDependency.ScriptName = nameAttrib.Value.ToLowerInvariant();
+                	scriptDependency.ScriptNameToken = tokenHelper.TokenizeFileName(scriptDependency.ScriptName);
                 }
 
                 var typeAttrib = dependency.Attribute(XmlConstants.TypeAttribute);
@@ -124,10 +128,13 @@ namespace ScriptDependencyExtension
                 }
                 _dependencyContainer.Dependencies.Add(scriptDependency);
             }
+			//TODO: Add in all dependencies into the cache
+			_httppContext.AddItemToGlobalCache(ScriptHelperConstants.CacheKey_ScriptDependencies,_dependencyContainer.Dependencies);
         }
 
-        internal void Initialise()
+        internal void Initialise(IHttpContext context)
         {
+        	_httppContext = context;
             if (_dependencyContainer.Dependencies.Count > 0)
                 return;
 

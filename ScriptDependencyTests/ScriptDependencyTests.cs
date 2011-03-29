@@ -231,6 +231,8 @@ namespace ScriptDependencyTests
         public bool IsDebuggingEnabled { get; set; }
         public bool HasValidWebContext { get; set; }
 
+		private IDictionary<string,object> _globalCache = new Dictionary<string, object>();
+
         private IDictionary _perRequestItemCache = new Dictionary<object, object>();
         public IDictionary PerRequestItemCache { get { return _perRequestItemCache; } }
 
@@ -239,9 +241,24 @@ namespace ScriptDependencyTests
             return relativePath.Replace("~", string.Empty);
         }
 
-    
+		public T GetItemFromGlobalCache<T>(string cacheKey) where T : class
+		{
+			if (_globalCache.Keys.Contains(cacheKey))
+				return _globalCache[cacheKey] as T;
 
-}
+			return null;
+		}
+
+		public void AddItemToGlobalCache(string cacheKey, object data)
+		{
+			if (_globalCache.Keys.Contains(cacheKey))
+				_globalCache[cacheKey] = data;
+			else
+			{
+				_globalCache.Add(cacheKey, data);				
+			}
+		}
+	}
 
 }
 

@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{16DFCCF3-87E8-4706-ADF9-EA66CE40E204}</ProjectGuid>
+    <ProjectGuid>{11AF28FC-5449-4922-89A8-800AC2A5F3C1}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ScriptDependencyExtension</RootNamespace>
-    <AssemblyName>ScriptDependencyExtension</AssemblyName>
+    <RootNamespace>ScriptDependencyExtension.Handler</RootNamespace>
+    <AssemblyName>ScriptDependencyExtension.Handler</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -34,11 +34,6 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Web" />
-    <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Program Files (x86)\Microsoft ASP.NET\ASP.NET MVC 3\Assemblies\System.Web.Mvc.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -46,26 +41,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Constants\ScriptHelperConstants.cs" />
-    <Compile Include="TokenisationHelper.cs" />
-    <Compile Include="Http\HttpContextAdapter.cs" />
-    <Compile Include="Http\IHttpContext.cs" />
+    <Compile Include="FileServeHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="FileCombiner.cs" />
-    <Compile Include="ScriptDependency.cs" />
-    <Compile Include="ScriptDependencyContainer.cs" />
-    <Compile Include="ScriptDependencyExtensions.cs" />
-    <Compile Include="ScriptDependencyLoader.cs" />
-    <Compile Include="Constants\ScriptName.cs" />
-    <Compile Include="ScriptEnumerations.cs" />
-    <Compile Include="Constants\XmlConstants.cs" />
-    <Compile Include="ScriptNameHelper.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="ScriptDependencies.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <SubType>Designer</SubType>
-    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -11,7 +11,9 @@ namespace ScriptDependencyExtension.Http
         bool IsDebuggingEnabled { get; }
         bool HasValidWebContext { get; }
         string ResolveScriptRelativePath(string relativePath);
-        IDictionary PerRequestItemCache { get;  } 
+        IDictionary PerRequestItemCache { get;  }
+    	T GetItemFromGlobalCache<T>(string cacheKey) where T : class;
+    	void AddItemToGlobalCache(string cacheKey, object data);
 
     }
 }
