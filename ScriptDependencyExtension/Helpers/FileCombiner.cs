@@ -5,7 +5,7 @@ using System.Text;
 using System.IO;
 using ScriptDependencyExtension.Http;
 
-namespace ScriptDependencyExtension
+namespace ScriptDependencyExtension.Helpers
 {
 	public class FileCombiner
 	{

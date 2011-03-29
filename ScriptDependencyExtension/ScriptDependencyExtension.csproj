@@ -47,19 +47,20 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants\ScriptHelperConstants.cs" />
-    <Compile Include="TokenisationHelper.cs" />
+    <Compile Include="ScriptEngine.cs" />
+    <Compile Include="Helpers\TokenisationHelper.cs" />
     <Compile Include="Http\HttpContextAdapter.cs" />
     <Compile Include="Http\IHttpContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="FileCombiner.cs" />
+    <Compile Include="Helpers\FileCombiner.cs" />
     <Compile Include="ScriptDependency.cs" />
     <Compile Include="ScriptDependencyContainer.cs" />
     <Compile Include="ScriptDependencyExtensions.cs" />
     <Compile Include="ScriptDependencyLoader.cs" />
     <Compile Include="Constants\ScriptName.cs" />
-    <Compile Include="ScriptEnumerations.cs" />
+    <Compile Include="Constants\ScriptEnumerations.cs" />
     <Compile Include="Constants\XmlConstants.cs" />
-    <Compile Include="ScriptNameHelper.cs" />
+    <Compile Include="Helpers\ScriptNameHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="ScriptDependencies.xml">

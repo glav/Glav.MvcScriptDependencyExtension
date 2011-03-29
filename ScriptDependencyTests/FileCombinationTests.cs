@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ScriptDependencyExtension;
 using System.IO;
+using ScriptDependencyExtension.Helpers;
 using ScriptDependencyExtension.Http;
 
 namespace ScriptDependencyTests

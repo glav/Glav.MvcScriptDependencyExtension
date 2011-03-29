@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace ScriptDependencyExtension
+namespace ScriptDependencyExtension.Helpers
 {
 	public class TokenisationHelper
 	{
-		public string TokenizeFileName(string filename)
+		public string TokeniseFileName(string filename)
 		{
 			Decimal nameValue = 0;
 			if (!string.IsNullOrWhiteSpace(filename))
@@ -41,7 +41,7 @@ namespace ScriptDependencyExtension
 				{
 					queryString.Append("?c=");
 				}
-				var tokenForFilename = fileHelper.TokenizeFileName(filename);
+				var tokenForFilename = fileHelper.TokeniseFileName(filename);
 				queryString.Append(tokenForFilename);
 			}
 

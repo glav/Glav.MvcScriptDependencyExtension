@@ -7,12 +7,22 @@ using System.Xml;
 using System.Xml.Linq;
 using System.Web;
 using ScriptDependencyExtension.Constants;
+using ScriptDependencyExtension.Helpers;
 using ScriptDependencyExtension.Http;
 
 namespace ScriptDependencyExtension
 {
-    internal class ScriptDependencyLoader
-    {
+	public interface IScriptDependencyLoader
+	{
+		ScriptDependencyContainer DependencyContainer { get; }
+		string DependencyResourceFile { get; set; }
+		void LoadDependencies();
+		void LoadDependencies(string filename);
+		void Initialise(IHttpContext context);
+	}
+
+	internal class ScriptDependencyLoader : IScriptDependencyLoader
+	{
         private ScriptDependencyContainer _dependencyContainer = new ScriptDependencyContainer();
         public ScriptDependencyContainer DependencyContainer { get { return _dependencyContainer; } }
 
@@ -54,12 +64,12 @@ namespace ScriptDependencyExtension
                 throw new FileNotFoundException(string.Format("{0} Dependency file not found.", FILENAME));
         }
 
-        internal void LoadDependencies()
+		public void LoadDependencies()
         {
             LoadDependencies(DependencyResourceFile);
         }
 
-        internal void LoadDependencies(string filename)
+		public void LoadDependencies(string filename)
         {
             // If we did not find a file, or the dependency file load ended up loading nothing,
             // then at least load up some known dependencies.
@@ -97,7 +107,7 @@ namespace ScriptDependencyExtension
                 if (nameAttrib != null)
                 {
                     scriptDependency.ScriptName = nameAttrib.Value.ToLowerInvariant();
-                	scriptDependency.ScriptNameToken = tokenHelper.TokenizeFileName(scriptDependency.ScriptName);
+                	scriptDependency.ScriptNameToken = tokenHelper.TokeniseFileName(scriptDependency.ScriptName);
                 }
 
                 var typeAttrib = dependency.Attribute(XmlConstants.TypeAttribute);
@@ -128,11 +138,10 @@ namespace ScriptDependencyExtension
                 }
                 _dependencyContainer.Dependencies.Add(scriptDependency);
             }
-			//TODO: Add in all dependencies into the cache
 			_httppContext.AddItemToGlobalCache(ScriptHelperConstants.CacheKey_ScriptDependencies,_dependencyContainer.Dependencies);
         }
 
-        internal void Initialise(IHttpContext context)
+		public void Initialise(IHttpContext context)
         {
         	_httppContext = context;
             if (_dependencyContainer.Dependencies.Count > 0)

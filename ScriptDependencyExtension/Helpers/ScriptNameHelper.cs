@@ -5,7 +5,7 @@ using System.Text;
 using ScriptDependencyExtension.Constants;
 using ScriptDependencyExtension.Http;
 
-namespace ScriptDependencyExtension
+namespace ScriptDependencyExtension.Helpers
 {
 	public class ScriptNameHelper
 	{

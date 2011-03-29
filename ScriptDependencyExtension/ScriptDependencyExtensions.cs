@@ -15,7 +15,7 @@ namespace ScriptDependencyExtension
 {
 	public class ScriptHelper
 	{
-		private static ScriptDependencyLoader _scriptLoader = new ScriptDependencyLoader();
+		private static IScriptDependencyLoader _scriptLoader = new ScriptDependencyLoader();
 
 		public ScriptHelper(IHttpContext context)
 		{
@@ -27,43 +27,6 @@ namespace ScriptDependencyExtension
 
 		public IHttpContext WebHttpContext { get; set; }
 
-		public List<string> JavascriptFilesToCombineList
-		{
-			get
-			{
-				List<string> list = null;
-				if (WebHttpContext.PerRequestItemCache.Contains(ScriptHelperConstants.CacheKey_JSFilesToCombineList))
-				{
-					list = WebHttpContext.PerRequestItemCache[ScriptHelperConstants.CacheKey_JSFilesToCombineList] as List<string>;
-				}
-				else
-				{
-					list = new List<string>();
-					WebHttpContext.PerRequestItemCache[ScriptHelperConstants.CacheKey_JSFilesToCombineList] = list;
-				}
-				return list;
-			}
-			set { WebHttpContext.PerRequestItemCache[ScriptHelperConstants.CacheKey_JSFilesToCombineList] = value; }
-		}
-
-		public List<string> CssFilesToCombineList
-		{
-			get
-			{
-				List<string> list = null;
-				if (WebHttpContext.PerRequestItemCache.Contains(ScriptHelperConstants.CacheKey_CSSFilesToCombineList))
-				{
-					list = WebHttpContext.PerRequestItemCache[ScriptHelperConstants.CacheKey_CSSFilesToCombineList] as List<string>;
-				}
-				else
-				{
-					list = new List<string>();
-					WebHttpContext.PerRequestItemCache[ScriptHelperConstants.CacheKey_CSSFilesToCombineList] = list;
-				}
-				return list;
-			}
-			set { WebHttpContext.PerRequestItemCache[ScriptHelperConstants.CacheKey_CSSFilesToCombineList] = value; }
-		}
 
 		#endregion
 
@@ -78,8 +41,6 @@ namespace ScriptDependencyExtension
 		}
 		internal static MvcHtmlString RequiresScript(IHttpContext context, string scriptName)
 		{
-			ScriptHelper helper = new ScriptHelper(context);
-
 			if (string.IsNullOrWhiteSpace(scriptName))
 				return MvcHtmlString.Empty;
 
@@ -108,8 +69,7 @@ namespace ScriptDependencyExtension
 
 		internal static MvcHtmlString RequiresScripts(IHttpContext context, params string[] scriptNames)
 		{
-			ScriptHelper helper = new ScriptHelper(context);
-
+			ScriptEngine engine = new ScriptEngine(context, _scriptLoader);
 			// Use this to register multiple scripts and prevent multiple entries of base script like
 			// jQuery core.
 			StringBuilder emittedScript = new StringBuilder();
@@ -119,7 +79,7 @@ namespace ScriptDependencyExtension
 			{
 				if (_scriptLoader.DependencyContainer.ShouldCombineScripts)
 				{
-					helper.GenerateCombinedScript(emittedScript);
+					engine.GenerateCombinedScript(scriptNames, emittedScript);
 				}
 				else
 				{
@@ -127,7 +87,7 @@ namespace ScriptDependencyExtension
 					{
 						if (!string.IsNullOrWhiteSpace(scriptName))
 						{
-							helper.GenerateDependencyScript(scriptName, emittedScript);
+							engine.GenerateDependencyScript(scriptName, emittedScript);
 						}
 					}
 				}
@@ -160,7 +120,7 @@ namespace ScriptDependencyExtension
 
 		internal static void RequiresScriptsDeferred(IHttpContext context, params string[] scriptNames)
 		{
-			ScriptHelper helper = new ScriptHelper(context);
+			ScriptEngine engine = new ScriptEngine(context,_scriptLoader);
 
 			// First lets see if the required script has any dependencies and include them first
 			if (scriptNames != null && scriptNames.Length > 0)
@@ -168,7 +128,7 @@ namespace ScriptDependencyExtension
 				foreach (var scriptName in scriptNames)
 				{
 					if (!string.IsNullOrWhiteSpace(scriptName))
-						helper.AddScriptToDeferredList(scriptName);
+						engine.AddScriptToDeferredList(scriptName);
 				}
 			}
 		}
@@ -183,141 +143,11 @@ namespace ScriptDependencyExtension
 
 		internal static MvcHtmlString RenderDeferredScripts(IHttpContext context)
 		{
-			ScriptHelper helper = new ScriptHelper(context);
+			ScriptEngine engine = new ScriptEngine(context,_scriptLoader);
 
-			return MvcHtmlString.Create(helper.RenderDeferredScriptsToBuffer());
+			return MvcHtmlString.Create(engine.RenderDeferredScriptsToBuffer());
 
 		}
 		#endregion
-
-		private void AddScriptToDeferredList(string scriptName)
-		{
-			List<string> scriptNames;
-			if (!WebHttpContext.PerRequestItemCache.Contains("DeferredScripts"))
-			{
-				scriptNames = new List<string>();
-				WebHttpContext.PerRequestItemCache.Add("DeferredScripts", scriptNames);
-			}
-			else
-			{
-				scriptNames = WebHttpContext.PerRequestItemCache["DeferredScripts"] as List<string>;
-			}
-			scriptNames.Add(scriptName);
-			WebHttpContext.PerRequestItemCache["DeferredScripts"] = scriptNames;
-		}
-
-		private string RenderDeferredScriptsToBuffer()
-		{
-			var deferredScripts = WebHttpContext.PerRequestItemCache["DeferredScripts"] as List<string>;
-			if (deferredScripts == null)
-				return null;
-
-			StringBuilder emittedScript = new StringBuilder();
-
-			if (_scriptLoader.DependencyContainer.ShouldCombineScripts)
-			{
-				GenerateCombinedScript(emittedScript);
-			}
-			else
-			{
-				foreach (var scriptName in deferredScripts)
-				{
-					if (!string.IsNullOrWhiteSpace(scriptName))
-						GenerateDependencyScript(scriptName, emittedScript);
-				}
-			}
-
-			return emittedScript.ToString();
-
-		}
-
-		private void GenerateDependencyScript(string scriptName, StringBuilder emittedScript)
-		{
-			var dependency = _scriptLoader.DependencyContainer.FindDependency(scriptName);
-			if (dependency != null)
-			{
-				if (dependency.RequiredDependencies != null && dependency.RequiredDependencies.Count > 0)
-				{
-					dependency.RequiredDependencies.ForEach(dependencyName =>
-					                                        	{
-					                                        		var requiredDependency =
-					                                        			_scriptLoader.DependencyContainer.FindDependency(dependencyName);
-						// Recursively hunt for script dependencies
-						GenerateDependencyScript(requiredDependency.ScriptName, emittedScript);
-						AddScriptToOutputBuffer(requiredDependency, emittedScript);
-					});
-				}
-				if (!string.IsNullOrWhiteSpace(dependency.ScriptPath))
-				{
-					AddScriptToOutputBuffer(dependency, emittedScript);
-				}
-			}
-		}
-
-		private void AddScriptToOutputBuffer(ScriptDependency dependency, StringBuilder buffer)
-		{
-			// If its already been added as part of this request, then dont add it in.
-			if (WebHttpContext.PerRequestItemCache.Contains(dependency.ScriptName))
-				return;
-
-			var nameHelper = new ScriptNameHelper(WebHttpContext, _scriptLoader.DependencyContainer);
-
-			string fullScriptInclude = null;
-
-			var jsCombineList = JavascriptFilesToCombineList;
-			var cssCombineList = CssFilesToCombineList;
-
-			var resolvedPath = WebHttpContext.ResolveScriptRelativePath(dependency.ScriptPath);
-			if (dependency.TypeOfScript == ScriptType.CSS)
-			{
-				if (_scriptLoader.DependencyContainer.ShouldCombineScripts)
-				{
-					if (!cssCombineList.Contains(dependency.ScriptPath))
-						cssCombineList.Add(dependency.ScriptPath);
-				}
-				else
-				{
-					fullScriptInclude = string.Format(ScriptHelperConstants.CSSInclude, resolvedPath,
-					                                  _scriptLoader.DependencyContainer.VersionMonikerQueryStringName,
-					                                  _scriptLoader.DependencyContainer.VersionIdentifier);
-				}
-			}
-			else
-			{
-				if (_scriptLoader.DependencyContainer.ShouldCombineScripts)
-				{
-					if (!jsCombineList.Contains(dependency.ScriptPath))
-						jsCombineList.Add(dependency.ScriptPath);
-				}
-				else
-				{
-					var scriptNameBasedOnMode = nameHelper.DetermineScriptNameBasedOnDebugOrRelease(resolvedPath);
-					if (!string.IsNullOrWhiteSpace(scriptNameBasedOnMode))
-						fullScriptInclude = string.Format(ScriptHelperConstants.ScriptInclude, scriptNameBasedOnMode,
-						                                  _scriptLoader.DependencyContainer.VersionMonikerQueryStringName,
-						                                  _scriptLoader.DependencyContainer.VersionIdentifier);
-				}
-			}
-			if (_scriptLoader.DependencyContainer.ShouldCombineScripts)
-			{
-				JavascriptFilesToCombineList = jsCombineList;
-				CssFilesToCombineList = cssCombineList;
-			}
-			else
-			{
-				if (!string.IsNullOrWhiteSpace(fullScriptInclude) &&
-				    !ScriptNameHelper.HasScriptAlreadyBeenAdded(fullScriptInclude, buffer))
-				{
-					buffer.Append(fullScriptInclude);
-					WebHttpContext.PerRequestItemCache.Add(dependency.ScriptName, fullScriptInclude);
-				}
-			}
-		}
-
-		private void GenerateCombinedScript(StringBuilder emittedScript)
-		{
-			throw new NotImplementedException();
-		}
-
 	}
 }
