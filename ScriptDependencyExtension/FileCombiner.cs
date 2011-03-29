@@ -49,7 +49,6 @@ namespace ScriptDependencyExtension
 				realExtension.Append(fileExtension);
 			}
 
-			//TODO: Cannot use hashcode here as it uses different numbers for same filenames but different instances
 			string moniker = GenerateUniqueMonikerBasedOnFileNames(_filesToCombine);
 			return string.Format("Resource-{0}.combined{1}", moniker, realExtension.ToString());
 		}
