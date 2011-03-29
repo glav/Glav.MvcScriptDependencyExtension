@@ -72,11 +72,15 @@ namespace ScriptDependencyExtension
             var debugSuffixEl = rootElement.Attribute(XmlConstants.DebugSuffixAttribute);
 			var scriptVersion = rootElement.Attribute(XmlConstants.ResourceVersionIdentifierAttribute);
         	var versionMoniker = rootElement.Attribute(XmlConstants.VersionMonikerQueryStringName);
+			var combineScripts = rootElement.Attribute(XmlConstants.CombineScriptsAttribute);
 
 			_dependencyContainer.VersionIdentifier = scriptVersion !=null ? scriptVersion.Value : "1.0";
             _dependencyContainer.ReleaseSuffix = releaseSuffixEl != null ? releaseSuffixEl.Value : string.Empty;
             _dependencyContainer.DebugSuffix = debugSuffixEl != null ? debugSuffixEl.Value : string.Empty;
         	_dependencyContainer.VersionMonikerQueryStringName = versionMoniker != null ? versionMoniker.Value : "version";
+        	_dependencyContainer.ShouldCombineScripts = combineScripts != null
+        	                                            	? (combineScripts.Value.ToLower() == "true")
+        	                                            	: false;
 
             ExtractDependencies(dependencies);
         }

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<Dependencies ReleaseSuffix="min" DebugSuffix="debug" VersionIdentifier="123" VersionMonikerQueryStringName="v">
+<Dependencies ReleaseSuffix="min" DebugSuffix="debug" VersionIdentifier="123" VersionMonikerQueryStringName="v" CombineScripts="true">
 
   <Dependency Name="jQuery-validate-unobtrusive" Type="js">
     <ScriptFile>~/Scripts/jquery.validate.unobtrusive.js</ScriptFile>

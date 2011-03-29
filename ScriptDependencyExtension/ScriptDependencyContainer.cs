@@ -11,6 +11,7 @@ namespace ScriptDependencyExtension
         public string DebugSuffix { get; set;  }
 		public string VersionIdentifier { get; set; }
 		public string VersionMonikerQueryStringName { get; set; }
+		public bool ShouldCombineScripts { get; set; }
 
         private List<ScriptDependency> _knownDependencies = new List<ScriptDependency>();
         public List<ScriptDependency> Dependencies { get { return _knownDependencies; } }
