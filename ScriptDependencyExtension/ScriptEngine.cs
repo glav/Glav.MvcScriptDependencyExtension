@@ -94,10 +94,7 @@ namespace ScriptDependencyExtension
 					GenerateDependencyScript(scriptName, emittedScript);
 			}
 
-			if (_scriptLoader.DependencyContainer.ShouldCombineScripts)
-			{
-				GenerateCombinedScriptQueryString(deferredScripts.ToArray(), emittedScript);
-			}
+			GenerateCombinedScriptsIfRequired(emittedScript);
 
 			return emittedScript.ToString();
 
@@ -157,8 +154,8 @@ namespace ScriptDependencyExtension
 			{
 				if (_scriptLoader.DependencyContainer.ShouldCombineScripts)
 				{
-					if (!cssCombineList.Contains(dependency.ScriptPath))
-						cssCombineList.Add(dependency.ScriptPath);
+				    if (!cssCombineList.Contains(dependency.ScriptName))
+				        cssCombineList.Add(dependency.ScriptName);
 				}
 				else
 				{
@@ -171,8 +168,8 @@ namespace ScriptDependencyExtension
 			{
 				if (_scriptLoader.DependencyContainer.ShouldCombineScripts)
 				{
-					if (!jsCombineList.Contains(dependency.ScriptPath))
-						jsCombineList.Add(dependency.ScriptPath);
+					if (!jsCombineList.Contains(dependency.ScriptName))
+						jsCombineList.Add(dependency.ScriptName);
 				}
 				else
 				{
@@ -183,7 +180,8 @@ namespace ScriptDependencyExtension
 														  _scriptLoader.DependencyContainer.VersionIdentifier);
 				}
 			}
-			if (_scriptLoader.DependencyContainer.ShouldCombineScripts)
+
+			if (_scriptLoader.DependencyContainer.ShouldCombineScripts && !string.IsNullOrWhiteSpace(fullScriptInclude))
 			{
 				JavascriptFilesToCombineList = jsCombineList;
 				CssFilesToCombineList = cssCombineList;
@@ -199,16 +197,44 @@ namespace ScriptDependencyExtension
 			}
 		}
 
-		public void GenerateCombinedScriptQueryString(string[] scriptNames, StringBuilder emittedScript)
+		public void GenerateCombinedScriptsIfRequired(StringBuilder emittedScript)
+		{
+			if (_scriptLoader.DependencyContainer.ShouldCombineScripts)
+			{
+				var cssScripts = CssFilesToCombineList;
+				var jsScripts = JavascriptFilesToCombineList;
+				if (cssScripts != null && cssScripts.Count > 0)
+				{
+					GenerateCombinedScriptQueryString(cssScripts.ToArray(), emittedScript, ScriptType.CSS);
+				}
+				if (jsScripts != null && jsScripts.Count > 0)
+				{
+					GenerateCombinedScriptQueryString(jsScripts.ToArray(), emittedScript, ScriptType.Javascript);
+				}
+			}
+		}
+
+
+		public void GenerateCombinedScriptQueryString(string[] scriptNames, StringBuilder emittedScript, ScriptType typeOfScript)
 		{
 			ITokenisationHelper tokenHelper = new TokenisationHelper();
 			var queyString = tokenHelper.GenerateQueryStringRequestForDependencyNames(scriptNames);
 			var resolvedHandlerLocation =
 				_httpContext.ResolveScriptRelativePath(string.Format("~/{0}", ScriptHelperConstants.ScriptDependencyHandlerName));
-			emittedScript.AppendFormat(ScriptHelperConstants.ScriptInclude,
-									   resolvedHandlerLocation,
-									   _scriptLoader.DependencyContainer.VersionMonikerQueryStringName,
-									   _scriptLoader.DependencyContainer.VersionIdentifier + "&" + queyString);
+			if (typeOfScript == ScriptType.CSS)
+			{
+				emittedScript.AppendFormat(ScriptHelperConstants.CSSInclude,
+										   resolvedHandlerLocation,
+										   _scriptLoader.DependencyContainer.VersionMonikerQueryStringName,
+										   _scriptLoader.DependencyContainer.VersionIdentifier + "&" + queyString);
+			}
+			else
+			{
+				emittedScript.AppendFormat(ScriptHelperConstants.ScriptInclude,
+										   resolvedHandlerLocation,
+										   _scriptLoader.DependencyContainer.VersionMonikerQueryStringName,
+										   _scriptLoader.DependencyContainer.VersionIdentifier + "&" + queyString);
+			}
 		}
 	}
 }

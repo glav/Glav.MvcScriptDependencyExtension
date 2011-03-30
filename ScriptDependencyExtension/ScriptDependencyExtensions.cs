@@ -96,11 +96,7 @@ namespace ScriptDependencyExtension
 					}
 				}
 
-				if (_scriptLoader.DependencyContainer.ShouldCombineScripts)
-				{
-					engine.GenerateCombinedScriptQueryString(scriptNames, emittedScript);
-				}
-
+				engine.GenerateCombinedScriptsIfRequired(emittedScript);
 			}
 
 			return MvcHtmlString.Create(emittedScript.ToString());
@@ -163,5 +159,6 @@ namespace ScriptDependencyExtension
 
 		}
 		#endregion
+
 	}
 }
