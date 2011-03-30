@@ -14,6 +14,7 @@ namespace ScriptDependencyExtension.Http
         IDictionary PerRequestItemCache { get;  }
     	T GetItemFromGlobalCache<T>(string cacheKey) where T : class;
     	void AddItemToGlobalCache(string cacheKey, object data);
-
+    	string ApplicationDirectory { get;  }
+    	string ResolvePhysicalFilePathFromRelative(string relativePath);
     }
 }

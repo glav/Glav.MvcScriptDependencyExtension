@@ -258,6 +258,17 @@ namespace ScriptDependencyTests
 				_globalCache.Add(cacheKey, data);				
 			}
 		}
+
+
+		public string ApplicationDirectory
+		{
+			get { return System.Environment.CurrentDirectory; }
+		}
+
+		public string ResolvePhysicalFilePathFromRelative(string relativePath)
+		{
+			return ResolveScriptRelativePath(relativePath);
+		}
 	}
 
 }

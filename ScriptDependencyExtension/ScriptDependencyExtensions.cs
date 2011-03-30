@@ -79,7 +79,7 @@ namespace ScriptDependencyExtension
 		internal static MvcHtmlString RequiresScripts(IHttpContext context, params string[] scriptNames)
 		{
 			InitScriptLoader(context);
-			
+
 			ScriptEngine engine = new ScriptEngine(context, _scriptLoader);
 			// Use this to register multiple scripts and prevent multiple entries of base script like
 			// jQuery core.
@@ -88,20 +88,19 @@ namespace ScriptDependencyExtension
 			// First lets see if the required script has any dependencies and include them first
 			if (scriptNames != null && scriptNames.Length > 0)
 			{
+				foreach (var scriptName in scriptNames)
+				{
+					if (!string.IsNullOrWhiteSpace(scriptName))
+					{
+						engine.GenerateDependencyScript(scriptName, emittedScript);
+					}
+				}
+
 				if (_scriptLoader.DependencyContainer.ShouldCombineScripts)
 				{
 					engine.GenerateCombinedScriptQueryString(scriptNames, emittedScript);
 				}
-				else
-				{
-					foreach (var scriptName in scriptNames)
-					{
-						if (!string.IsNullOrWhiteSpace(scriptName))
-						{
-							engine.GenerateDependencyScript(scriptName, emittedScript);
-						}
-					}
-				}
+
 			}
 
 			return MvcHtmlString.Create(emittedScript.ToString());

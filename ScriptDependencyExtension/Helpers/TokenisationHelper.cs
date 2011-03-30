@@ -98,11 +98,11 @@ namespace ScriptDependencyExtension.Helpers
 			if (!string.IsNullOrWhiteSpace(queryString) && queryString.Length > 3)
 			{
 				var queryStringIdentifier = string.Format("{0}=", ScriptHelperConstants.CombinedScriptQueryStringIdentifier);
-				int pos = queryStringIdentifier.IndexOf(queryStringIdentifier);
+				int pos = queryString.IndexOf(queryStringIdentifier);
 				if (pos >= 0)
 				{
 					pos += queryStringIdentifier.Length;
-					int endPos = queryString.LastIndexOf("&");
+					int endPos = queryString.IndexOf("&",pos);
 					if (endPos <0)
 					{
 						endPos = queryString.Length - 1;

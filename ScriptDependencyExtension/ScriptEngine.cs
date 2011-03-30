@@ -88,17 +88,15 @@ namespace ScriptDependencyExtension
 
 			StringBuilder emittedScript = new StringBuilder();
 
+			foreach (var scriptName in deferredScripts)
+			{
+				if (!string.IsNullOrWhiteSpace(scriptName))
+					GenerateDependencyScript(scriptName, emittedScript);
+			}
+
 			if (_scriptLoader.DependencyContainer.ShouldCombineScripts)
 			{
 				GenerateCombinedScriptQueryString(deferredScripts.ToArray(), emittedScript);
-			}
-			else
-			{
-				foreach (var scriptName in deferredScripts)
-				{
-					if (!string.IsNullOrWhiteSpace(scriptName))
-						GenerateDependencyScript(scriptName, emittedScript);
-				}
 			}
 
 			return emittedScript.ToString();
@@ -205,10 +203,12 @@ namespace ScriptDependencyExtension
 		{
 			ITokenisationHelper tokenHelper = new TokenisationHelper();
 			var queyString = tokenHelper.GenerateQueryStringRequestForDependencyNames(scriptNames);
+			var resolvedHandlerLocation =
+				_httpContext.ResolveScriptRelativePath(string.Format("~/{0}", ScriptHelperConstants.ScriptDependencyHandlerName));
 			emittedScript.AppendFormat(ScriptHelperConstants.ScriptInclude,
-			                           ScriptHelperConstants.ScriptDependencyHandlerName,
-			                           _scriptLoader.DependencyContainer.VersionMonikerQueryStringName,
-			                           _scriptLoader.DependencyContainer.VersionIdentifier + "&" + queyString);
+									   resolvedHandlerLocation,
+									   _scriptLoader.DependencyContainer.VersionMonikerQueryStringName,
+									   _scriptLoader.DependencyContainer.VersionIdentifier + "&" + queyString);
 		}
 	}
 }

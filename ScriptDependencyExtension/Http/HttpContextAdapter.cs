@@ -42,6 +42,21 @@ namespace ScriptDependencyExtension.Http
 			get { return _isDebuggingEnabled; }
 		}
 
+		public string ApplicationDirectory
+		{
+			get
+			{
+				if (System.Web.HttpContext.Current != null)
+				{
+					return System.Web.HttpRuntime.AppDomainAppPath;
+				}
+				else
+				{
+					return System.Environment.CurrentDirectory;
+				}
+			}
+		}
+
 		public string ResolveScriptRelativePath(string relativePath)
 		{
 			if (HasValidWebContext && !string.IsNullOrWhiteSpace(relativePath))
@@ -49,6 +64,20 @@ namespace ScriptDependencyExtension.Http
 				var relReplace = relativePath.Replace("~", _context.Request.ApplicationPath);
 				if (!string.IsNullOrWhiteSpace(relReplace))
 					return relReplace.Replace("//", "/");
+				return relReplace;
+			}
+			return ResolveRelativePathWithNoHttpContext(relativePath);
+		}
+
+		public string ResolvePhysicalFilePathFromRelative(string relativePath)
+		{
+			if (HasValidWebContext && !string.IsNullOrWhiteSpace(relativePath))
+			{
+				var relReplace = relativePath.Replace("~", ApplicationDirectory);
+				if (!string.IsNullOrWhiteSpace(relReplace))
+				{
+					return relReplace.Replace("/", "\\").Replace("\\\\", "\\");
+				}
 				return relReplace;
 			}
 			return ResolveRelativePathWithNoHttpContext(relativePath);
@@ -72,10 +101,10 @@ namespace ScriptDependencyExtension.Http
 		{
 			return _context.Cache[cacheKey] as T;
 		}
-		
+
 		public void AddItemToGlobalCache(string cacheKey, object data)
 		{
-			_context.Cache.Add(cacheKey,data,null,Cache.NoAbsoluteExpiration,Cache.NoSlidingExpiration,CacheItemPriority.Normal,null);
+			_context.Cache.Add(cacheKey, data, null, Cache.NoAbsoluteExpiration, Cache.NoSlidingExpiration, CacheItemPriority.Normal, null);
 		}
 	}
 }
