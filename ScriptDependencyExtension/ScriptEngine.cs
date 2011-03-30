@@ -90,7 +90,7 @@ namespace ScriptDependencyExtension
 
 			if (_scriptLoader.DependencyContainer.ShouldCombineScripts)
 			{
-				GenerateCombinedScript(deferredScripts.ToArray(), emittedScript);
+				GenerateCombinedScriptQueryString(deferredScripts.ToArray(), emittedScript);
 			}
 			else
 			{
@@ -201,9 +201,14 @@ namespace ScriptDependencyExtension
 			}
 		}
 
-		public void GenerateCombinedScript(string[] scriptNames, StringBuilder emittedScript)
+		public void GenerateCombinedScriptQueryString(string[] scriptNames, StringBuilder emittedScript)
 		{
-			throw new NotImplementedException();
+			ITokenisationHelper tokenHelper = new TokenisationHelper();
+			var queyString = tokenHelper.GenerateQueryStringRequestForDependencyNames(scriptNames);
+			emittedScript.AppendFormat(ScriptHelperConstants.ScriptInclude,
+			                           ScriptHelperConstants.ScriptDependencyHandlerName,
+			                           _scriptLoader.DependencyContainer.VersionMonikerQueryStringName,
+			                           _scriptLoader.DependencyContainer.VersionIdentifier + "&" + queyString);
 		}
 	}
 }

@@ -112,7 +112,7 @@ namespace ScriptDependencyExtension
 
         private void ExtractDependencies(IEnumerable<XElement> dependencies)
         {
-        	var tokenHelper = new TokenisationHelper();
+			ITokenisationHelper tokenHelper = new TokenisationHelper();
             foreach (var dependency in dependencies)
             {
                 var scriptDependency = new ScriptDependency();

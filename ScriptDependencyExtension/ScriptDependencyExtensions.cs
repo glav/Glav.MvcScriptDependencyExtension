@@ -90,7 +90,7 @@ namespace ScriptDependencyExtension
 			{
 				if (_scriptLoader.DependencyContainer.ShouldCombineScripts)
 				{
-					engine.GenerateCombinedScript(scriptNames, emittedScript);
+					engine.GenerateCombinedScriptQueryString(scriptNames, emittedScript);
 				}
 				else
 				{

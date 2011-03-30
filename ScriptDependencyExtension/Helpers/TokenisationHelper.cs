@@ -6,14 +6,36 @@ using ScriptDependencyExtension.Constants;
 
 namespace ScriptDependencyExtension.Helpers
 {
-	public class TokenisationHelper
+	public interface ITokenisationHelper
 	{
-		public string TokeniseString(string filename)
+		string TokeniseString(string filename);
+
+		/// <summary>
+		/// This will create a query string identifying the type of files that are to be combined.
+		/// It will be in the form handler.axd?c=123,456,789
+		/// Where the numbers represent unique tokens for each script dependency name
+		/// </summary>
+		/// <returns></returns>
+		string GenerateQueryStringRequestForDependencyNames(IEnumerable<string> dependenciesToCombine);
+
+		/// <summary>
+		/// Takes a query string (as rendered by a script combine request) and generates the script dependencies names
+		/// it represents
+		/// </summary>
+		/// <param name="queryString"></param>
+		/// <returns></returns>
+		List<ScriptDependency> GetListOfDependencyNamesFromQueryStringTokens(string queryString, ScriptDependencyContainer scriptContainer);
+	}
+
+	public class TokenisationHelper : ITokenisationHelper
+	{
+		public string TokeniseString(string textToTokenise)
 		{
 			Decimal nameValue = 0;
-			if (!string.IsNullOrWhiteSpace(filename))
+			if (!string.IsNullOrWhiteSpace(textToTokenise))
 			{
-				var unicodeBytes = System.Text.UnicodeEncoding.Unicode.GetBytes(filename);
+				var normalisedText = textToTokenise.ToLowerInvariant();
+				var unicodeBytes = System.Text.UnicodeEncoding.Unicode.GetBytes(normalisedText);
 				for (int pos = 0; pos < unicodeBytes.Length; pos++)
 				{
 					nameValue += ((int)unicodeBytes[pos]) * (pos + 1);
@@ -40,7 +62,7 @@ namespace ScriptDependencyExtension.Helpers
 				}
 				else
 				{
-					queryString.AppendFormat("?{0}=", ScriptHelperConstants.CombinedScriptQueryStringIdentifier);
+					queryString.AppendFormat("{0}=", ScriptHelperConstants.CombinedScriptQueryStringIdentifier);
 				}
 				var tokenForFilename = fileHelper.TokeniseString(dependencyName);
 				queryString.Append(tokenForFilename);
@@ -75,7 +97,7 @@ namespace ScriptDependencyExtension.Helpers
 			List<string> tokens = new List<string>();
 			if (!string.IsNullOrWhiteSpace(queryString) && queryString.Length > 3)
 			{
-				var queryStringIdentifier = string.Format("?{0}=", ScriptHelperConstants.CombinedScriptQueryStringIdentifier);
+				var queryStringIdentifier = string.Format("{0}=", ScriptHelperConstants.CombinedScriptQueryStringIdentifier);
 				int pos = queryStringIdentifier.IndexOf(queryStringIdentifier);
 				if (pos >= 0)
 				{

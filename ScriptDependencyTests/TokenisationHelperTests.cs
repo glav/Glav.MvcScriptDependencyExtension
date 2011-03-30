@@ -21,7 +21,17 @@ namespace ScriptDependencyTests
 			var queryString = helper.GenerateQueryStringRequestForDependencyNames(testDependencies);
 
 			Assert.IsFalse(string.IsNullOrWhiteSpace(queryString));
-			Assert.IsTrue(queryString.Contains(string.Format("?{0}=",ScriptHelperConstants.CombinedScriptQueryStringIdentifier)));
+			Assert.IsTrue(queryString.Contains(string.Format("{0}=",ScriptHelperConstants.CombinedScriptQueryStringIdentifier)));
+		}
+
+		[TestMethod]
+		public void UpperAndLowerCaseTokenisedNamesShouldEqual()
+		{
+			var helper = new TokenisationHelper();
+
+			Assert.AreEqual<string>(helper.TokeniseString("one"), helper.TokeniseString("One"));
+			Assert.AreEqual<string>(helper.TokeniseString("TWO"), helper.TokeniseString("two"));
+			Assert.AreEqual<string>(helper.TokeniseString("ThReE"), helper.TokeniseString("tHrEe"));
 		}
 
 		[TestMethod]
