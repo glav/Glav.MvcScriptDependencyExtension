@@ -19,5 +19,8 @@ namespace ScriptDependencyExtension.Constants
 
 		public const string CombinedScriptQueryStringIdentifier = "scrptcmb";
     	public const string ScriptDependencyHandlerName = "ScriptDependency.axd";
-    }
+
+		public const string ContentType_Javascript = "application/x-javascript";
+		public const string ContentType_CSS = "text/css";
+	}
 }

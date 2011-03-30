@@ -206,10 +206,12 @@ namespace ScriptDependencyExtension
 				if (cssScripts != null && cssScripts.Count > 0)
 				{
 					GenerateCombinedScriptQueryString(cssScripts.ToArray(), emittedScript, ScriptType.CSS);
+					CssFilesToCombineList = null; // clear the request cache after rendering it
 				}
 				if (jsScripts != null && jsScripts.Count > 0)
 				{
 					GenerateCombinedScriptQueryString(jsScripts.ToArray(), emittedScript, ScriptType.Javascript);
+					JavascriptFilesToCombineList = null; // clear the request cache after rendering it
 				}
 			}
 		}

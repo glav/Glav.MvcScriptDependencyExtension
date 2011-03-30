@@ -1,0 +1,21 @@
+﻿@{
+    ViewBag.Title = "CombineHeadInclude";
+}
+
+<h2>CombineHeadInclude</h2>
+
+<div>
+    <h2>Include Deferred Script Section</h2>
+    @ScriptDependencyExtension.ScriptHelper.RequiresScripts("HomeStyle")
+    @ScriptDependencyExtension.ScriptHelper.RequiresScriptsDeferred("jQuery-validate")
+    @ScriptDependencyExtension.ScriptHelper.RequiresScriptsDeferred("Microsoft-Mvc-Ajax")
+
+</div>
+
+<p>Some Content</p>
+
+<div>
+    <h3>The Deferred Script Rendering Section</h3>
+    @ScriptDependencyExtension.ScriptHelper.RenderDeferredScripts()
+</div>
+

@@ -25,11 +25,11 @@ namespace ScriptDependencyExtension.Handler
 			var engine = new ScriptEngine(contextAdaptor, new ScriptDependencyLoader(contextAdaptor));
 			var tokenHelper = new TokenisationHelper();
 			var dependencies = tokenHelper.GetListOfDependencyNamesFromQueryStringTokens(context.Request.RawUrl,scriptLoader.DependencyContainer);
-			var contentType = "application/x-javascript";
+			var contentType = ScriptHelperConstants.ContentType_Javascript;
 			if (dependencies.Count > 0)
 			{
 				if (dependencies[0].TypeOfScript == ScriptType.CSS)
-					contentType = "text/css";
+					contentType = ScriptHelperConstants.ContentType_CSS;
 			}
 			var listOfFiles = dependencies.Select(d => d.ScriptPath).ToList();
 			var combiner = new FileCombiner(contextAdaptor,listOfFiles);

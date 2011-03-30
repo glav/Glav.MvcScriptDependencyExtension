@@ -24,12 +24,12 @@ namespace ScriptDependencyTests
             context.HasValidWebContext = true;
             context.IsDebuggingEnabled = true;
 
-            var script1 = ScriptHelper.RequiresScript(context,ScriptName.jQuery);
+            var script1 = ScriptHelper.RequiresScripts(context,ScriptName.jQuery);
 
             Assert.IsTrue(!string.IsNullOrWhiteSpace(script1.ToString()));
             Assert.IsTrue(script1.ToString().Contains("src='/Scripts/jquery-1.4.1.debug.js" + VERSION_QUERY_STRING));
 
-            var script2 = ScriptHelper.RequiresScript(context,ScriptName.jqueryValidateUnobtrusive);
+            var script2 = ScriptHelper.RequiresScripts(context,ScriptName.jqueryValidateUnobtrusive);
 
             Assert.IsTrue(!string.IsNullOrWhiteSpace(script2.ToString()));
 			Assert.IsTrue(script2.ToString().Contains("src='/Scripts/jquery.validate.debug.js" + VERSION_QUERY_STRING));
@@ -65,7 +65,7 @@ namespace ScriptDependencyTests
             context.HasValidWebContext = true;
             context.IsDebuggingEnabled = true;
 
-            var script = ScriptHelper.RequiresScript(context, ScriptName.AllScripts);
+            var script = ScriptHelper.RequiresScripts(context, ScriptName.AllScripts);
 			Assert.IsTrue(script.ToString().Contains("src='/Scripts/jquery-1.4.1.debug.js" + VERSION_QUERY_STRING));
 			Assert.IsTrue(script.ToString().Contains("src='/Scripts/jquery.validate.debug.js" + VERSION_QUERY_STRING));
 			Assert.IsTrue(script.ToString().Contains("src='/Scripts/MicrosoftAjax.debug.js" + VERSION_QUERY_STRING));
@@ -79,19 +79,19 @@ namespace ScriptDependencyTests
             context.HasValidWebContext = true;
             context.IsDebuggingEnabled = true;
 
-            var script = ScriptHelper.RequiresScript(context, null);
+            var script = ScriptHelper.RequiresScripts(context, null);
             Assert.IsNotNull(script);
             Assert.AreEqual<MvcHtmlString>(MvcHtmlString.Empty, script);
 
-            script = ScriptHelper.RequiresScript(context, "");
+            script = ScriptHelper.RequiresScripts(context, "");
             Assert.IsNotNull(script);
             Assert.AreEqual<MvcHtmlString>(MvcHtmlString.Empty, script);
 
-            script = ScriptHelper.RequiresScript(context, string.Empty);
+            script = ScriptHelper.RequiresScripts(context, string.Empty);
             Assert.IsNotNull(script);
             Assert.AreEqual<MvcHtmlString>(MvcHtmlString.Empty, script);
 
-            script = ScriptHelper.RequiresScript(context, "   ");
+            script = ScriptHelper.RequiresScripts(context, "   ");
             Assert.IsNotNull(script);
             Assert.AreEqual<MvcHtmlString>(MvcHtmlString.Empty, script);
         }
@@ -104,7 +104,7 @@ namespace ScriptDependencyTests
             context.HasValidWebContext = true;
             context.IsDebuggingEnabled = true;
 
-            var script = ScriptHelper.RequiresScript(context, ScriptName.jQuery);
+            var script = ScriptHelper.RequiresScripts(context, ScriptName.jQuery);
         }
 
         [TestMethod]
@@ -115,7 +115,7 @@ namespace ScriptDependencyTests
             mockContext.HasValidWebContext = true;
             mockContext.IsDebuggingEnabled = true;
 
-            var script1 = ScriptHelper.RequiresScript(mockContext, ScriptName.jQuery);
+            var script1 = ScriptHelper.RequiresScripts(mockContext, ScriptName.jQuery);
 
             Assert.IsTrue(!string.IsNullOrWhiteSpace(script1.ToString()));
 			Assert.IsTrue(script1.ToString().Contains("/Scripts/jquery-1.4.1.debug.js" + VERSION_QUERY_STRING));
@@ -129,7 +129,7 @@ namespace ScriptDependencyTests
             mockContext.HasValidWebContext = true;
             mockContext.IsDebuggingEnabled = false;
 
-            var script1 = ScriptHelper.RequiresScript(mockContext, ScriptName.jQuery);
+            var script1 = ScriptHelper.RequiresScripts(mockContext, ScriptName.jQuery);
 
             Assert.IsTrue(!string.IsNullOrWhiteSpace(script1.ToString()));
 			Assert.IsTrue(script1.ToString().Contains("/Scripts/jquery-1.4.1.min.js" + VERSION_QUERY_STRING));
@@ -143,7 +143,7 @@ namespace ScriptDependencyTests
             mockContext.HasValidWebContext = true;
             mockContext.IsDebuggingEnabled = false;
 
-            var script1 = ScriptHelper.RequiresScript(mockContext, ScriptName.MicrosoftMvcValidation);
+            var script1 = ScriptHelper.RequiresScripts(mockContext, ScriptName.MicrosoftMvcValidation);
 
             Assert.IsTrue(!string.IsNullOrWhiteSpace(script1.ToString()));
 			Assert.IsTrue(script1.ToString().Contains("/Content/Site.css" + VERSION_QUERY_STRING));
@@ -157,7 +157,7 @@ namespace ScriptDependencyTests
             mockContext.HasValidWebContext = true;
             mockContext.IsDebuggingEnabled = false;
 
-            var script1 = ScriptHelper.RequiresScript(mockContext, "PageSpecificStyle");
+            var script1 = ScriptHelper.RequiresScripts(mockContext, "PageSpecificStyle");
 
             Assert.IsTrue(!string.IsNullOrWhiteSpace(script1.ToString()));
 			Assert.IsTrue(script1.ToString().Contains("/Content/Site.css" + VERSION_QUERY_STRING));
@@ -172,8 +172,8 @@ namespace ScriptDependencyTests
             mockContext.HasValidWebContext = true;
             mockContext.IsDebuggingEnabled = false;
 
-            var script1 = ScriptHelper.RequiresScript(mockContext, ScriptName.jQuery);
-            var script2 = ScriptHelper.RequiresScript(mockContext, ScriptName.jQuery);
+            var script1 = ScriptHelper.RequiresScripts(mockContext, ScriptName.jQuery);
+            var script2 = ScriptHelper.RequiresScripts(mockContext, ScriptName.jQuery);
 
             Assert.IsTrue(!string.IsNullOrWhiteSpace(script1.ToString()));
 			Assert.IsTrue(script1.ToString().Contains("/Scripts/jquery-1.4.1.min.js" + VERSION_QUERY_STRING));
