@@ -118,6 +118,8 @@
     <Content Include="Views\Test\StdHeadInclude.cshtml" />
     <Content Include="Views\Test\DeferredScripts.cshtml" />
     <Content Include="Views\Test\Complex.cshtml" />
+    <Content Include="Views\Test\Complex_Part1.cshtml" />
+    <Content Include="Views\Test\Complex_Part2.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

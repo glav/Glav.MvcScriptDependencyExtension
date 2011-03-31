@@ -6,7 +6,21 @@
 
 <div>
     <h3>Render Script Section</h3>
-    @ScriptDependencyExtension.ScriptHelper.RequiresScripts("jQuery")
-    @ScriptDependencyExtension.ScriptHelper.RenderDeferredScripts()
+    @ScriptDependencyExtension.ScriptHelper.RequiresScripts("jQuery" )
 
+</div>
+
+<div>
+    <h3>Partial 1</h3>
+    @Html.Partial("Complex_Part1")
+</div>
+
+<div>
+    <h3>Partial 2</h3>
+    @Html.Partial("Complex_Part2")
+</div>
+
+<div>
+    <h3>Deferred Rendering Section</h3>
+    @ScriptDependencyExtension.ScriptHelper.RenderDeferredScripts()
 </div>

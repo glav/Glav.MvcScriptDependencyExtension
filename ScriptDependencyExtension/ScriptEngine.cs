@@ -28,40 +28,43 @@ namespace ScriptDependencyExtension
 		{
 			get
 			{
-				List<string> list = null;
-				if (_httpContext.PerRequestItemCache.Contains(ScriptHelperConstants.CacheKey_JSFilesToCombineList))
-				{
-					list = _httpContext.PerRequestItemCache[ScriptHelperConstants.CacheKey_JSFilesToCombineList] as List<string>;
-				}
-				else
-				{
-					list = new List<string>();
-					_httpContext.PerRequestItemCache[ScriptHelperConstants.CacheKey_JSFilesToCombineList] = list;
-				}
-				return list;
+				return SafeGetListFromRequestCache(ScriptHelperConstants.CacheKey_JSFilesToCombineList);
 			}
 			set { _httpContext.PerRequestItemCache[ScriptHelperConstants.CacheKey_JSFilesToCombineList] = value; }
+		}
+		public List<string> ScriptFilesAlreadyRendered
+		{
+			get
+			{
+				return SafeGetListFromRequestCache(ScriptHelperConstants.CacheKey_ScriptFilesAlreadyRendered);
+			}
+			set { _httpContext.PerRequestItemCache[ScriptHelperConstants.CacheKey_ScriptFilesAlreadyRendered] = value; }
 		}
 
 		public List<string> CssFilesToCombineList
 		{
 			get
 			{
-				List<string> list = null;
-				if (_httpContext.PerRequestItemCache.Contains(ScriptHelperConstants.CacheKey_CSSFilesToCombineList))
-				{
-					list = _httpContext.PerRequestItemCache[ScriptHelperConstants.CacheKey_CSSFilesToCombineList] as List<string>;
-				}
-				else
-				{
-					list = new List<string>();
-					_httpContext.PerRequestItemCache[ScriptHelperConstants.CacheKey_CSSFilesToCombineList] = list;
-				}
-				return list;
+				return SafeGetListFromRequestCache(ScriptHelperConstants.CacheKey_CSSFilesToCombineList);
 			}
 			set { _httpContext.PerRequestItemCache[ScriptHelperConstants.CacheKey_CSSFilesToCombineList] = value; }
 		}
 
+		private List<string> SafeGetListFromRequestCache(string cacheKey)
+		{
+			List<string> list = null;
+			if (_httpContext.PerRequestItemCache.Contains(cacheKey))
+			{
+				list = _httpContext.PerRequestItemCache[cacheKey] as List<string>;
+			}
+			if (list == null)
+			{
+				list = new List<string>();
+				_httpContext.PerRequestItemCache[cacheKey] = list;
+			}
+			return list;
+			
+		}
 		#endregion
 
 		public void AddScriptToDeferredList(string scriptName)
@@ -91,7 +94,14 @@ namespace ScriptDependencyExtension
 			foreach (var scriptName in deferredScripts)
 			{
 				if (!string.IsNullOrWhiteSpace(scriptName))
-					GenerateDependencyScript(scriptName, emittedScript);
+				{
+					var alreadyRenderedScripts = ScriptFilesAlreadyRendered;
+					if (!alreadyRenderedScripts.Contains(scriptName))
+					{
+						GenerateDependencyScript(scriptName, emittedScript);
+
+					}
+				}
 			}
 
 			GenerateCombinedScriptsIfRequired(emittedScript);
@@ -139,6 +149,10 @@ namespace ScriptDependencyExtension
 		public void AddScriptToOutputBuffer(ScriptDependency dependency, StringBuilder buffer)
 		{
 			// If its already been added as part of this request, then dont add it in.
+			var alreadyRendered = ScriptFilesAlreadyRendered;
+			if (alreadyRendered.Contains(dependency.ScriptName))
+				return;
+
 			if (_httpContext.PerRequestItemCache.Contains(dependency.ScriptName))
 				return;
 
@@ -189,9 +203,10 @@ namespace ScriptDependencyExtension
 			else
 			{
 				if (!string.IsNullOrWhiteSpace(fullScriptInclude) &&
-					!ScriptNameHelper.HasScriptAlreadyBeenAdded(fullScriptInclude, buffer))
+					!ScriptNameHelper.HasScriptAlreadyBeenAddedToBuffer(fullScriptInclude, buffer))
 				{
 					buffer.Append(fullScriptInclude);
+					AddToAlreadyRenderedScripts(dependency.ScriptName);
 					_httpContext.PerRequestItemCache.Add(dependency.ScriptName, fullScriptInclude);
 				}
 			}
@@ -203,17 +218,39 @@ namespace ScriptDependencyExtension
 			{
 				var cssScripts = CssFilesToCombineList;
 				var jsScripts = JavascriptFilesToCombineList;
+
 				if (cssScripts != null && cssScripts.Count > 0)
 				{
 					GenerateCombinedScriptQueryString(cssScripts.ToArray(), emittedScript, ScriptType.CSS);
+					AddToAlreadyRenderedScripts(cssScripts);
 					CssFilesToCombineList = null; // clear the request cache after rendering it
 				}
 				if (jsScripts != null && jsScripts.Count > 0)
 				{
 					GenerateCombinedScriptQueryString(jsScripts.ToArray(), emittedScript, ScriptType.Javascript);
+					AddToAlreadyRenderedScripts(jsScripts);
 					JavascriptFilesToCombineList = null; // clear the request cache after rendering it
 				}
 			}
+		}
+
+		private void AddToAlreadyRenderedScripts(string scriptName)
+		{
+			var list = new List<string>();
+			list.Add(scriptName);
+			AddToAlreadyRenderedScripts(list);
+		}
+		private void AddToAlreadyRenderedScripts(List<string> renderedScripts)
+		{
+			var alreadyRendered = ScriptFilesAlreadyRendered;
+			renderedScripts.ForEach(s =>
+			{
+				if (!alreadyRendered.Contains(s))
+					alreadyRendered.Add(s);
+			});
+			if (alreadyRendered.Count > 0)
+				ScriptFilesAlreadyRendered = alreadyRendered;
+
 		}
 
 

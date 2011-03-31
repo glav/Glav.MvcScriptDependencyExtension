@@ -80,7 +80,7 @@ namespace ScriptDependencyExtension.Helpers
 			return string.Format("{0}.{1}.js", scriptPrefix, _scriptContainer.DebugSuffix);
 		}
 
-		public static bool HasScriptAlreadyBeenAdded(string scriptToCheck, StringBuilder emittedScript)
+		public static bool HasScriptAlreadyBeenAddedToBuffer(string scriptToCheck, StringBuilder emittedScript)
 		{
 			var existingScript = emittedScript.ToString().ToLowerInvariant();
 			return (existingScript.Contains(scriptToCheck.ToLowerInvariant()));
