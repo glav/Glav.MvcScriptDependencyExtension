@@ -72,4 +72,10 @@
     <ScriptFile>~/Content/Script2.js</ScriptFile>
   </Dependency>
 
+  <Dependency Name="AllScripts">
+    <RequiredDependencies>
+      <Name>jQuery-validate-unobtrusive</Name>
+      <Name>Microsoft-Mvc-Validation</Name>
+    </RequiredDependencies>
+  </Dependency>
 </Dependencies>

@@ -70,6 +70,9 @@ namespace ScriptDependencyExtension
 				engine.GenerateCombinedScriptsIfRequired(emittedScript);
 			}
 
+			if (emittedScript.Length == 0)
+				return MvcHtmlString.Empty;
+
 			return MvcHtmlString.Create(emittedScript.ToString());
 		}
 
