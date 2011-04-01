@@ -223,7 +223,47 @@ namespace ScriptDependencyTests
 
         }
 
-    }
+		[DeploymentItem("ScriptDependencies.xml")]
+		[TestMethod]
+		public void DeferredScriptsShouldRenderWhenRequested()
+		{
+			var mockContext = new MockContext();
+			mockContext.HasValidWebContext = true;
+			mockContext.IsDebuggingEnabled = false;
+
+			ScriptHelper.RequiresScriptsDeferred(mockContext, "jQuery-validate");
+
+			var script = ScriptHelper.RenderDeferredScripts(mockContext);
+
+			Assert.IsTrue(!string.IsNullOrWhiteSpace(script.ToString()));
+			Assert.IsTrue(script.ToString().Contains("src='/Scripts/jquery-1.4.1.min.js" + VERSION_QUERY_STRING));
+			Assert.IsTrue(script.ToString().Contains("src='/Scripts/jquery.validate.min.js" + VERSION_QUERY_STRING));
+
+		}
+		
+		[DeploymentItem("ScriptDependencies.xml")]
+		[TestMethod]
+		public void DeferredScriptsShouldIncludePreviouslyRenderedScripts()
+		{
+			var mockContext = new MockContext();
+			mockContext.HasValidWebContext = true;
+			mockContext.IsDebuggingEnabled = false;
+
+			// Request a deferred load of a script and its dependencies, in this case jQuery
+			ScriptHelper.RequiresScriptsDeferred(mockContext, "jQuery-validate");
+
+			//Now simulate a page requesting that jQuery be loaded in non deferred mode, so it gets 
+			//rendered immediatelyso we dont need it rendered again
+			var someJunk= ScriptHelper.RequiresScripts(mockContext,"jQuery");
+
+			var script = ScriptHelper.RenderDeferredScripts(mockContext);
+
+			Assert.IsTrue(!string.IsNullOrWhiteSpace(script.ToString()));
+			Assert.IsFalse(script.ToString().Contains("src='/Scripts/jquery-1.4.1.min.js" + VERSION_QUERY_STRING));
+			Assert.IsTrue(script.ToString().Contains("src='/Scripts/jquery.validate.min.js" + VERSION_QUERY_STRING));
+
+		}
+	}
 
 
     public class MockContext : IHttpContext
