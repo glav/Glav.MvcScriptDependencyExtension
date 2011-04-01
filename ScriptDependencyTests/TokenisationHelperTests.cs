@@ -6,6 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ScriptDependencyExtension;
 using ScriptDependencyExtension.Constants;
 using ScriptDependencyExtension.Helpers;
+using ScriptDependencyExtension.Model;
 
 namespace ScriptDependencyTests
 {

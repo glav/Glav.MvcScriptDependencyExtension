@@ -55,8 +55,8 @@
     <Compile Include="Http\IHttpContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Helpers\FileCombiner.cs" />
-    <Compile Include="ScriptDependency.cs" />
-    <Compile Include="ScriptDependencyContainer.cs" />
+    <Compile Include="Model\ScriptDependency.cs" />
+    <Compile Include="Model\ScriptDependencyContainer.cs" />
     <Compile Include="ScriptDependencyExtensions.cs" />
     <Compile Include="ScriptDependencyLoader.cs" />
     <Compile Include="Constants\ScriptName.cs" />

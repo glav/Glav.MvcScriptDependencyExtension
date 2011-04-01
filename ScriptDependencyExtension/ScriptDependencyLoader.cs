@@ -9,6 +9,7 @@ using System.Web;
 using ScriptDependencyExtension.Constants;
 using ScriptDependencyExtension.Helpers;
 using ScriptDependencyExtension.Http;
+using ScriptDependencyExtension.Model;
 
 namespace ScriptDependencyExtension
 {

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using ScriptDependencyExtension.Constants;
 using ScriptDependencyExtension.Http;
+using ScriptDependencyExtension.Model;
 
 namespace ScriptDependencyExtension.Helpers
 {

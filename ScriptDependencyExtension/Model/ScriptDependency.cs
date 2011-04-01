@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using ScriptDependencyExtension.Constants;
 
-namespace ScriptDependencyExtension
+namespace ScriptDependencyExtension.Model
 {
     public class ScriptDependency
     {
