@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="Constants\ScriptHelperConstants.cs" />
     <Compile Include="Handler\FileServeHandler.cs" />
+    <Compile Include="ScriptCache.cs" />
     <Compile Include="ScriptEngine.cs" />
     <Compile Include="Helpers\TokenisationHelper.cs" />
     <Compile Include="Http\HttpContextAdapter.cs" />

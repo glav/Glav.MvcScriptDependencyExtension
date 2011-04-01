@@ -101,7 +101,7 @@ namespace ScriptDependencyExtension
 				foreach (var scriptName in scriptNames)
 				{
 					if (!string.IsNullOrWhiteSpace(scriptName))
-						engine.AddScriptToDeferredList(scriptName);
+						engine.ScriptCache.AddScriptToDeferredList(scriptName);
 				}
 			}
 		}

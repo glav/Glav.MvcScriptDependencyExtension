@@ -56,6 +56,16 @@ namespace ScriptDependencyExtension
         };
 
         public string DependencyResourceFile { get; set; }
+
+		public bool IsInitialised
+		{
+			get
+			{
+				return
+					(_httpContext.GetItemFromGlobalCache<List<ScriptDependency>>(ScriptHelperConstants.CacheKey_ScriptDependencies) !=
+					 null);
+			}
+		}
 		
 		#endregion
 
@@ -112,6 +122,9 @@ namespace ScriptDependencyExtension
 
         private void ExtractDependencies(IEnumerable<XElement> dependencies)
         {
+			if (IsInitialised)
+				return;
+
 			ITokenisationHelper tokenHelper = new TokenisationHelper();
             foreach (var dependency in dependencies)
             {
@@ -156,7 +169,7 @@ namespace ScriptDependencyExtension
 
 		public void Initialise()
         {
-            if (_dependencyContainer.Dependencies.Count > 0)
+            if (_dependencyContainer.Dependencies.Count > 0 || IsInitialised)
                 return;
 
             lock (_lockObject)
