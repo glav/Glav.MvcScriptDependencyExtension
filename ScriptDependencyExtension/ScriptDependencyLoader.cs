@@ -170,10 +170,19 @@ namespace ScriptDependencyExtension
 
 		public void Initialise()
         {
-            if (_dependencyContainer.Dependencies.Count > 0 || IsInitialised)
-                return;
+			if (_dependencyContainer.Dependencies.Count > 0 || IsInitialised)
+			{
+				var dependencies =
+					_httpContext.GetItemFromGlobalCache<List<ScriptDependency>>(ScriptHelperConstants.CacheKey_ScriptDependencies);
+				if (dependencies != null)
+				{
+					_dependencyContainer.Dependencies.Clear();
+					_dependencyContainer.Dependencies.AddRange(dependencies);
+					return;
+				}
+			}
 
-            lock (_lockObject)
+			lock (_lockObject)
             {
                 if (_dependencyContainer.Dependencies.Count == 0)
                 {
