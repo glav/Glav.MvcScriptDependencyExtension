@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ScriptDependencyExtension.Constants;
+using ScriptDependencyExtension.Filters;
 using ScriptDependencyExtension.Helpers;
 using ScriptDependencyExtension.Http;
 using ScriptDependencyExtension.Model;
@@ -57,6 +58,19 @@ namespace ScriptDependencyExtension
 
 			return emittedScript.ToString();
 
+		}
+
+		public void ApplyFiltersToScriptOutput(StringBuilder emittedScript, ScriptType scriptType)
+		{
+			_filters.ForEach((filter) =>
+			                 	{
+			                 		var filterResult = filter().ProcessScript(emittedScript.ToString(),scriptType);
+									if (!string.IsNullOrWhiteSpace(filterResult))
+									{
+										emittedScript.Clear();
+										emittedScript.Append(filterResult);
+									}
+			                 	});
 		}
 		
 		private void RegisterFilters()
