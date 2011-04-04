@@ -6,6 +6,7 @@ using System.Web;
 using ScriptDependencyExtension.Constants;
 using ScriptDependencyExtension.Http;
 using ScriptDependencyExtension.Helpers;
+using ScriptDependencyExtension.Model;
 
 namespace ScriptDependencyExtension.Handler
 {
@@ -22,10 +23,9 @@ namespace ScriptDependencyExtension.Handler
 			var scriptLoader = new ScriptDependencyLoader(contextAdaptor);
 			scriptLoader.Initialise();
 
-			var engine = new ScriptEngine(contextAdaptor, new ScriptDependencyLoader(contextAdaptor));
 			var tokenHelper = new TokenisationHelper();
-			var dependencies = tokenHelper.GetListOfDependencyNamesFromQueryStringTokens(context.Request.RawUrl,scriptLoader.DependencyContainer);
-			
+			var dependencies = tokenHelper.GetListOfDependencyNamesFromQueryStringTokens(context.Request.RawUrl,
+																						 scriptLoader.DependencyContainer);
 			var scriptType = dependencies[0].TypeOfScript;
 			var contentType = ScriptHelperConstants.ContentType_Javascript;
 			if (dependencies.Count > 0)
@@ -34,13 +34,24 @@ namespace ScriptDependencyExtension.Handler
 					contentType = ScriptHelperConstants.ContentType_CSS;
 			}
 			
-			var listOfFiles = dependencies.Select(d => d.ScriptPath).ToList();
-			var combiner = new FileCombiner(contextAdaptor,listOfFiles);
-			StringBuilder contents = new StringBuilder(combiner.CombineFiles());
-			engine.ApplyFiltersToScriptOutput(contents, scriptType,scriptLoader.DependencyContainer);
-			
+			var scriptToRender = contextAdaptor.GetItemFromGlobalCache<string>(context.Request.RawUrl);
+			if (string.IsNullOrWhiteSpace(scriptToRender))
+			{
+				var engine = new ScriptEngine(contextAdaptor, new ScriptDependencyLoader(contextAdaptor));
+				var listOfFiles = dependencies.Select(d => d.ScriptPath).ToList();
+				var combiner = new FileCombiner(contextAdaptor, listOfFiles);
+				StringBuilder contents = new StringBuilder(combiner.CombineFiles());
+				engine.ApplyFiltersToScriptOutput(contents, scriptType, scriptLoader.DependencyContainer);
+				scriptToRender = contents.ToString();
+				
+				// We do an extra check here just in case the script has been added to the cachein between
+				// the last check and this one
+				if (string.IsNullOrWhiteSpace(contextAdaptor.GetItemFromGlobalCache<string>(context.Request.RawUrl)))
+					contextAdaptor.AddItemToGlobalCache(context.Request.RawUrl,scriptToRender);
+			}
 			context.Response.ContentType = contentType;
-			context.Response.Write(contents.ToString());
+			context.Response.Write(scriptToRender);
 		}
+
 	}
 }
