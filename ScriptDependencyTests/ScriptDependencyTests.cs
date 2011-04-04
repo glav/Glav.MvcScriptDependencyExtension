@@ -243,7 +243,7 @@ namespace ScriptDependencyTests
 		
 		[DeploymentItem("ScriptDependencies.xml")]
 		[TestMethod]
-		public void DeferredScriptsShouldIncludePreviouslyRenderedScripts()
+		public void DeferredScriptsShouldNotIncludePreviouslyRenderedScripts()
 		{
 			var mockContext = new MockContext();
 			mockContext.HasValidWebContext = true;
