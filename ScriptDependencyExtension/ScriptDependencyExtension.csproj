@@ -50,7 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants\ScriptHelperConstants.cs" />
-    <Compile Include="Handler\FileServeHandler.cs" />
+    <Compile Include="Handler\ScriptServeHandler.cs" />
     <Compile Include="Filters\IScriptProcessingFilter.cs" />
     <Compile Include="ScriptCache.cs" />
     <Compile Include="ScriptEngine.cs" />
