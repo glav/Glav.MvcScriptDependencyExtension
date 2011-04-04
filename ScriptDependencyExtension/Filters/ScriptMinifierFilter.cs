@@ -6,13 +6,24 @@ using Microsoft.Ajax;
 using Microsoft.Ajax.Utilities;
 using ScriptDependencyExtension.Constants;
 using ScriptDependencyExtension.Filters;
+using ScriptDependencyExtension.Model;
+using ScriptDependencyExtension.Http;
 
 namespace ScriptDependencyExtension.Filters
 {
 	public class ScriptMinifierFilter : IScriptProcessingFilter
 	{
-		public string ProcessScript(string scriptContents, ScriptType scriptType)
+		private IHttpContext _context;
+
+		public ScriptMinifierFilter(IHttpContext context)
 		{
+			_context = context;
+		}
+		public string ProcessScript(string scriptContents, ScriptType scriptType, ScriptDependencyContainer container)
+		{
+			if (!container.ShouldMinifyScriptsInReleaseMode || _context.IsDebuggingEnabled)
+				return scriptContents;
+
 			var minifier = new Microsoft.Ajax.Utilities.Minifier();
 			switch (scriptType)
 			{

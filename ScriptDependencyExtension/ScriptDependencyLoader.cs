@@ -63,7 +63,7 @@ namespace ScriptDependencyExtension
 			get
 			{
 				return
-					(_httpContext.GetItemFromGlobalCache<List<ScriptDependency>>(ScriptHelperConstants.CacheKey_ScriptDependencies) !=
+					(_httpContext.GetItemFromGlobalCache<ScriptDependencyContainer>(ScriptHelperConstants.CacheKey_ScriptDependencies) !=
 					 null);
 			}
 		}
@@ -169,32 +169,29 @@ namespace ScriptDependencyExtension
                 }
                 _dependencyContainer.Dependencies.Add(scriptDependency);
             }
-			_httpContext.AddItemToGlobalCache(ScriptHelperConstants.CacheKey_ScriptDependencies,_dependencyContainer.Dependencies);
+			_httpContext.AddItemToGlobalCache(ScriptHelperConstants.CacheKey_ScriptDependencies,_dependencyContainer);
         }
 
 		public void Initialise()
         {
-			if (_dependencyContainer.Dependencies.Count > 0 || IsInitialised)
+			if (IsInitialised)
 			{
-				var dependencies =
-					_httpContext.GetItemFromGlobalCache<List<ScriptDependency>>(ScriptHelperConstants.CacheKey_ScriptDependencies);
-				if (dependencies != null)
-				{
-					_dependencyContainer.Dependencies.Clear();
-					_dependencyContainer.Dependencies.AddRange(dependencies);
-					return;
-				}
+				_dependencyContainer =
+					_httpContext.GetItemFromGlobalCache<ScriptDependencyContainer>(ScriptHelperConstants.CacheKey_ScriptDependencies);
 			}
 
-			lock (_lockObject)
-            {
-                if (_dependencyContainer.Dependencies.Count == 0)
-                {
-                    FindDependencyFile();
-                    LoadDependencies();
+			if (_dependencyContainer == null || _dependencyContainer.Dependencies.Count == 0)
+			{
+				lock (_lockObject)
+				{
+					if (_dependencyContainer == null || _dependencyContainer.Dependencies.Count == 0)
+					{
+						FindDependencyFile();
+						LoadDependencies();
 
-                }
-            }
+					}
+				}
+			}
         }
 
     }

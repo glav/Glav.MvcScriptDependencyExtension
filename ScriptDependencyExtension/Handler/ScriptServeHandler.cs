@@ -37,7 +37,7 @@ namespace ScriptDependencyExtension.Handler
 			var listOfFiles = dependencies.Select(d => d.ScriptPath).ToList();
 			var combiner = new FileCombiner(contextAdaptor,listOfFiles);
 			StringBuilder contents = new StringBuilder(combiner.CombineFiles());
-			engine.ApplyFiltersToScriptOutput(contents, scriptType);
+			engine.ApplyFiltersToScriptOutput(contents, scriptType,scriptLoader.DependencyContainer);
 			
 			context.Response.ContentType = contentType;
 			context.Response.Write(contents.ToString());

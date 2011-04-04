@@ -60,11 +60,11 @@ namespace ScriptDependencyExtension
 
 		}
 
-		public void ApplyFiltersToScriptOutput(StringBuilder emittedScript, ScriptType scriptType)
+		public void ApplyFiltersToScriptOutput(StringBuilder emittedScript, ScriptType scriptType, ScriptDependencyContainer container)
 		{
 			_filters.ForEach((filter) =>
 			                 	{
-			                 		var filterResult = filter().ProcessScript(emittedScript.ToString(),scriptType);
+			                 		var filterResult = filter().ProcessScript(emittedScript.ToString(),scriptType, container);
 									if (!string.IsNullOrWhiteSpace(filterResult))
 									{
 										emittedScript.Clear();
@@ -75,7 +75,7 @@ namespace ScriptDependencyExtension
 		
 		private void RegisterFilters()
 		{
-			_filters.Add(() => new ScriptMinifierFilter());
+			_filters.Add(() => new ScriptMinifierFilter(_httpContext));
 		}
 
 		/// <summary>
