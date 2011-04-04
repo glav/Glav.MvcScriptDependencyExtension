@@ -14,6 +14,7 @@ namespace ScriptDependencyExtension
 		private IHttpContext _httpContext;
 		private IScriptDependencyLoader _scriptLoader;
 		private ScriptCache _scriptCache;
+		List<Func<IScriptProcessingFilter>> _filters = new List<Func<IScriptProcessingFilter>>();
 
 		public ScriptEngine(IHttpContext context, IScriptDependencyLoader scriptLoader)
 		{
@@ -23,6 +24,7 @@ namespace ScriptDependencyExtension
 			_httpContext = context;
 			_scriptLoader = scriptLoader;
 			_scriptCache = new ScriptCache(context);
+			RegisterFilters();
 		}
 
 		public ScriptCache ScriptCache
@@ -55,6 +57,11 @@ namespace ScriptDependencyExtension
 
 			return emittedScript.ToString();
 
+		}
+		
+		private void RegisterFilters()
+		{
+			_filters.Add(() => new ScriptMinifierFilter());
 		}
 
 		/// <summary>

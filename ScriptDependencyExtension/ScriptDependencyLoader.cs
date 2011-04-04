@@ -109,6 +109,7 @@ namespace ScriptDependencyExtension
 			var scriptVersion = rootElement.Attribute(XmlConstants.ResourceVersionIdentifierAttribute);
         	var versionMoniker = rootElement.Attribute(XmlConstants.VersionMonikerQueryStringName);
 			var combineScripts = rootElement.Attribute(XmlConstants.CombineScriptsAttribute);
+			var minifyScripts = rootElement.Attribute(XmlConstants.MinifyScriptsInReleaseMode);
 
 			_dependencyContainer.VersionIdentifier = scriptVersion !=null ? scriptVersion.Value : "1.0";
             _dependencyContainer.ReleaseSuffix = releaseSuffixEl != null ? releaseSuffixEl.Value : string.Empty;
@@ -117,6 +118,9 @@ namespace ScriptDependencyExtension
         	_dependencyContainer.ShouldCombineScripts = combineScripts != null
         	                                            	? (combineScripts.Value.ToLower() == "true")
         	                                            	: false;
+			_dependencyContainer.ShouldMinifyScriptsInReleaseMode = minifyScripts != null
+															? (minifyScripts.Value.ToLower() == "true")
+															: false;
 
             ExtractDependencies(dependencies);
         }

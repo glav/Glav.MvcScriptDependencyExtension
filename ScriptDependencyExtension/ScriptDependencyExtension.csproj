@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="Constants\ScriptHelperConstants.cs" />
     <Compile Include="Handler\FileServeHandler.cs" />
+    <Compile Include="IScriptProcessingFilter.cs" />
     <Compile Include="ScriptCache.cs" />
     <Compile Include="ScriptEngine.cs" />
     <Compile Include="Helpers\TokenisationHelper.cs" />
@@ -63,6 +64,7 @@
     <Compile Include="Constants\ScriptEnumerations.cs" />
     <Compile Include="Constants\XmlConstants.cs" />
     <Compile Include="Helpers\ScriptNameHelper.cs" />
+    <Compile Include="ScriptMinifierFilter.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="ScriptDependencies.xml">

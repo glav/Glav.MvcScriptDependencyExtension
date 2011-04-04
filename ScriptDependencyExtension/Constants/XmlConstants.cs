@@ -19,6 +19,7 @@ namespace ScriptDependencyExtension.Constants
     	public const string ResourceVersionIdentifierAttribute = "VersionIdentifier";
 		public const string VersionMonikerQueryStringName = "VersionMonikerQueryStringName";
     	public const string CombineScriptsAttribute = "CombineScripts";
+		public const string MinifyScriptsInReleaseMode = "MinifyCombinedScriptsInReleaseMode";
 
         public const string CSSTypeValue = "css";
 
