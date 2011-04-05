@@ -52,6 +52,9 @@
     <Compile Include="Constants\ScriptHelperConstants.cs" />
     <Compile Include="Handler\ScriptServeHandler.cs" />
     <Compile Include="Filters\IScriptProcessingFilter.cs" />
+    <Compile Include="Helpers\IUniqueHashValueGenerator.cs" />
+    <Compile Include="Helpers\MD5HashValueGenerator.cs" />
+    <Compile Include="Helpers\SimpleHashValueGenerator.cs" />
     <Compile Include="ScriptCache.cs" />
     <Compile Include="ScriptEngine.cs" />
     <Compile Include="Helpers\TokenisationHelper.cs" />

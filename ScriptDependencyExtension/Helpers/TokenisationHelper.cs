@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using ScriptDependencyExtension.Constants;
 using ScriptDependencyExtension.Model;
+using System.IO;
 
 namespace ScriptDependencyExtension.Helpers
 {
@@ -30,19 +31,14 @@ namespace ScriptDependencyExtension.Helpers
 
 	public class TokenisationHelper : ITokenisationHelper
 	{
+		// Uncomment whichever one you want to use or create your own
+		// The MD5 and SHA1 algorithms generate really long identifiers tho
+		//private IUniqueHashValueGenerator _hashTokenGenerator = new MD5HashValueGenerator();
+		private IUniqueHashValueGenerator _hashTokenGenerator = new SimpleHashValueGenerator();
+
 		public string TokeniseString(string textToTokenise)
 		{
-			Decimal nameValue = 0;
-			if (!string.IsNullOrWhiteSpace(textToTokenise))
-			{
-				var normalisedText = textToTokenise.ToLowerInvariant();
-				var unicodeBytes = System.Text.UnicodeEncoding.Unicode.GetBytes(normalisedText);
-				for (int pos = 0; pos < unicodeBytes.Length; pos++)
-				{
-					nameValue += ((int)unicodeBytes[pos]) * (pos + 1);
-				}
-			}
-			return nameValue.ToString();
+			return _hashTokenGenerator.ComputeHash(textToTokenise);
 		}
 
 		/// <summary>
