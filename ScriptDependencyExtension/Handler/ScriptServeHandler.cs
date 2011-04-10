@@ -33,8 +33,12 @@ namespace ScriptDependencyExtension.Handler
 				if (scriptType == ScriptType.CSS)
 					contentType = ScriptHelperConstants.ContentType_CSS;
 			}
-			
-			var scriptToRender = contextAdaptor.GetItemFromGlobalCache<string>(context.Request.RawUrl);
+
+			string scriptToRender = null;
+			if (!contextAdaptor.IsDebuggingEnabled)
+			{
+				scriptToRender = contextAdaptor.GetItemFromGlobalCache<string>(context.Request.RawUrl);
+			}
 			if (string.IsNullOrWhiteSpace(scriptToRender))
 			{
 				var engine = new ScriptEngine(contextAdaptor, new ScriptDependencyLoader(contextAdaptor));
