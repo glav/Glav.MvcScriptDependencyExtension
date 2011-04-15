@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("ScriptDependencyMvcExtention")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("ScriptDependencyExtension")]
+[assembly: AssemblyDescription("JS/CSS Script Helper to include, minify, combine scripts and easily describe and manage dependencies.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Microsoft")]
-[assembly: AssemblyProduct("ScriptDependencyMvcExtention")]
-[assembly: AssemblyCopyright("Copyright © Microsoft 2010")]
+[assembly: AssemblyCompany("Glav")]
+[assembly: AssemblyProduct("ScriptDependencyExtension")]
+[assembly: AssemblyCopyright("Copyright © Paul Glavich 2011")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: InternalsVisibleTo("ScriptDependencyTests")]

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package>
+  <metadata>
+    <id>ScriptHelper</id>    
+    <title>ScriptHelper</title>
+    <version>1.0</version>
+    <authors>Paul Glavich
+    </authors>
+    <description>ScriptHelper is a smalland simple set of helper methods to allow easy Javascript and CSS inclusion
+	into web pages including file combination, JS/CSS minification. In addition, CSS and JS scripts can be given
+	logical/grouped names that express dependencies and include all dependencies in the page with combination and
+	minification.</description>
+<projectUrl>http://bitbucket.org/</projectUrl>
+    </metadata>
+  <files>
+      <file src="lib\*.dll" target="lib" /> 
+      <file src="content\ScriptDependency.xml" target="/" /> 
+  </files>
+</package>

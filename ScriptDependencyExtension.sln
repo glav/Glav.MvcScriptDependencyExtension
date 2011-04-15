@@ -19,6 +19,23 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dependencies", "Dependencie
 		Dependencies\AjaxMin.dll = Dependencies\AjaxMin.dll
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Nuget Package", "Nuget Package", "{CE52B283-C21C-4B2B-A154-78C3B838162C}"
+	ProjectSection(SolutionItems) = preProject
+		Nuget Package\ScriptHelper.nuspec = Nuget Package\ScriptHelper.nuspec
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "content", "content", "{26AE7DF7-A281-4E8E-9CC4-23435F011299}"
+	ProjectSection(SolutionItems) = preProject
+		Nuget Package\content\ScriptDependencies.xml = Nuget Package\content\ScriptDependencies.xml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lib", "lib", "{D7F1BEC6-7D76-4B91-AFF0-DD36A1665D3C}"
+	ProjectSection(SolutionItems) = preProject
+		Nuget Package\lib\AjaxMin.dll = Nuget Package\lib\AjaxMin.dll
+		Nuget Package\lib\ScriptDependencyExtension.dll = Nuget Package\lib\ScriptDependencyExtension.dll
+		Nuget Package\lib\System.Web.Mvc.dll = Nuget Package\lib\System.Web.Mvc.dll
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = ScriptDependencyExtension.vsmdi
@@ -43,5 +60,10 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{CE52B283-C21C-4B2B-A154-78C3B838162C} = {7A11646B-4D5A-4D16-897F-FAD0C7662916}
+		{26AE7DF7-A281-4E8E-9CC4-23435F011299} = {CE52B283-C21C-4B2B-A154-78C3B838162C}
+		{D7F1BEC6-7D76-4B91-AFF0-DD36A1665D3C} = {CE52B283-C21C-4B2B-A154-78C3B838162C}
 	EndGlobalSection
 EndGlobal
