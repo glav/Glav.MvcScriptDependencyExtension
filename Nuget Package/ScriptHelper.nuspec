@@ -3,7 +3,7 @@
   <metadata>
     <id>ScriptHelper</id>    
     <title>ScriptHelper</title>
-    <version>0.9</version>
+    <version>1.0</version>
     <authors>Paul Glavich
     </authors>
     <description>ScriptHelper is a small and simple set of helper methods to allow easy Javascript and CSS inclusion
