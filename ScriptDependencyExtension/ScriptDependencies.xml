@@ -18,7 +18,7 @@
   </Dependency>
 
   <Dependency Name="jQuery" Type="js">
-    <ScriptFile>~/Scripts/jquery-1.4.1.js</ScriptFile>
+    <ScriptFile>~/Scripts/jquery-1.5.1.js</ScriptFile>
   </Dependency>
 
   <Dependency Name="Microsoft-Ajax" Type="js">

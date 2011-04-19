@@ -13,7 +13,7 @@
 <projectUrl>http://bitbucket.org/</projectUrl>
     </metadata>
   <files>
-      <file src="lib\*.dll" target="lib" /> 
+      <file src="lib\*.dll" target="lib" />
       <file src="content\ScriptDependencies.xml" target="content" />
       <file src="content\web.config.transform" target="content" />
   </files>
