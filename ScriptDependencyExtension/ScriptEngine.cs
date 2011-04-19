@@ -117,10 +117,6 @@ namespace ScriptDependencyExtension
 		public void AddScriptToOutputBuffer(ScriptDependency dependency, StringBuilder buffer)
 		{
 			// If its already been added as part of this request, then dont add it in.
-			var alreadyRendered = _scriptCache.ScriptFilesAlreadyRendered;
-			if (alreadyRendered.Contains(dependency.ScriptName))
-				return;
-
 			if (_scriptCache.IsScriptInListOfScriptsAlreadyRendered(dependency.ScriptName))
 				return;
 
