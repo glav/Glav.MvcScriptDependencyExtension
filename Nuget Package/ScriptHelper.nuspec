@@ -3,7 +3,7 @@
   <metadata>
     <id>ScriptHelper</id>    
     <title>ScriptHelper</title>
-    <version>1.0</version>
+    <version>0.9</version>
     <authors>Paul Glavich
     </authors>
     <description>ScriptHelper is a small and simple set of helper methods to allow easy Javascript and CSS inclusion
@@ -14,6 +14,7 @@
     </metadata>
   <files>
       <file src="lib\*.dll" target="lib" /> 
-      <file src="content\ScriptDependencies.xml" target="/" /> 
+      <file src="content\ScriptDependencies.xml" target="content" />
+      <file src="content\web.config.transform" target="content" />
   </files>
 </package>

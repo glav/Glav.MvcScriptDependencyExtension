@@ -1,0 +1,19 @@
+<configuration> 
+  <system.web>
+    <pages>
+      <namespaces>
+        <add namespace="ScriptDependencyExtension" />
+      </namespaces>
+    </pages>
+
+    <httpHandlers>
+      <add verb="*" type="ScriptDependencyExtension.Handler.ScriptServeHandler" path="ScriptDependency.axd" />
+    </httpHandlers>
+  </system.web>
+  <system.webServer>
+    <modules runAllManagedModulesForAllRequests="true" />
+        <handlers>
+            <add name="ScriptDependencyHandler" path="ScriptDependency.axd" verb="*" type="ScriptDependencyExtension.Handler.ScriptServeHandler" resourceType="Unspecified" preCondition="integratedMode" />
+        </handlers>
+  </system.webServer>
+ </configuration>
