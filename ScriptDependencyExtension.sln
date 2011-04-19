@@ -27,6 +27,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "content", "content", "{26AE7DF7-A281-4E8E-9CC4-23435F011299}"
 	ProjectSection(SolutionItems) = preProject
 		Nuget Package\content\ScriptDependencies.xml = Nuget Package\content\ScriptDependencies.xml
+		Nuget Package\content\Web.config.transform = Nuget Package\content\Web.config.transform
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lib", "lib", "{D7F1BEC6-7D76-4B91-AFF0-DD36A1665D3C}"
