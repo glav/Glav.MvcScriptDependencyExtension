@@ -62,10 +62,6 @@ namespace ScriptDependencyExtension
 
 		public void AddToAlreadyRenderedScripts(List<string> renderedScripts)
 		{
-			// Dont do caching if in debug mode.
-			if (_httpContext.IsDebuggingEnabled)
-				return;
-
 			var alreadyRendered = ScriptFilesAlreadyRendered;
 			renderedScripts.ForEach(s =>
 			{

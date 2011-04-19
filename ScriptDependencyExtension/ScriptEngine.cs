@@ -170,8 +170,8 @@ namespace ScriptDependencyExtension
 					!ScriptNameHelper.HasScriptAlreadyBeenAddedToBuffer(fullScriptInclude, buffer))
 				{
 					buffer.Append(fullScriptInclude);
-					_scriptCache.AddToAlreadyRenderedScripts(dependency.ScriptName);
 				}
+                _scriptCache.AddToAlreadyRenderedScripts(dependency.ScriptName);
 			}
 		}
 
