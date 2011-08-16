@@ -34,7 +34,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lib", "lib", "{D7F1BEC6-7D7
 	ProjectSection(SolutionItems) = preProject
 		Nuget Package\lib\AjaxMin.dll = Nuget Package\lib\AjaxMin.dll
 		Nuget Package\lib\ScriptDependencyExtension.dll = Nuget Package\lib\ScriptDependencyExtension.dll
-		Nuget Package\lib\System.Web.Mvc.dll = Nuget Package\lib\System.Web.Mvc.dll
 	EndProjectSection
 EndProject
 Global
