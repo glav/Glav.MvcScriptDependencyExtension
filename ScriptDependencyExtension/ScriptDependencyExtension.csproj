@@ -73,6 +73,7 @@
     <Compile Include="Filters\ScriptMinifierFilter.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Copyright.txt" />
     <Content Include="ScriptDependencies.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <SubType>Designer</SubType>
