@@ -74,6 +74,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Copyright.txt" />
+    <Content Include="ReadMe.txt" />
     <Content Include="ScriptDependencies.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <SubType>Designer</SubType>
