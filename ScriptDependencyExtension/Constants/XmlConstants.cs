@@ -20,6 +20,7 @@ namespace ScriptDependencyExtension.Constants
 		public const string VersionMonikerQueryStringName = "VersionMonikerQueryStringName";
     	public const string CombineScriptsAttribute = "CombineScripts";
 		public const string MinifyScriptsInReleaseMode = "MinifyCombinedScriptsInReleaseMode";
+		public const string EnableDotLessSupport = "EnableDotLessSupport";
 
         public const string CSSTypeValue = "css";
 		public const string JSTypeValue = "js";

@@ -7,12 +7,17 @@ namespace ScriptDependencyExtension.Model
 {
     public class ScriptDependencyContainer
     {
+		public ScriptDependencyContainer()
+		{
+			EnableDotLessSupport = true;
+		}
         public string ReleaseSuffix { get; set; }
         public string DebugSuffix { get; set;  }
 		public string VersionIdentifier { get; set; }
 		public string VersionMonikerQueryStringName { get; set; }
 		public bool ShouldCombineScripts { get; set; }
 		public bool ShouldMinifyScriptsInReleaseMode { get; set; }
+		public bool EnableDotLessSupport { get; set; }
 
         private List<ScriptDependency> _knownDependencies = new List<ScriptDependency>();
         public List<ScriptDependency> Dependencies { get { return _knownDependencies; } }

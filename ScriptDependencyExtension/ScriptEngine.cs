@@ -30,7 +30,7 @@ namespace ScriptDependencyExtension
 
 		public ScriptCache ScriptCache
 		{
-			get { return _scriptCache;  }
+			get { return _scriptCache; }
 		}
 
 		public string RenderDeferredScriptsToBuffer()
@@ -63,19 +63,22 @@ namespace ScriptDependencyExtension
 		public void ApplyFiltersToScriptOutput(StringBuilder emittedScript, ScriptType scriptType, ScriptDependencyContainer container)
 		{
 			_filters.ForEach((filter) =>
-			                 	{
-			                 		var filterResult = filter().ProcessScript(emittedScript.ToString(),scriptType, container);
+								{
+									var filterResult = filter().ProcessScript(emittedScript.ToString(), scriptType, container);
 									if (!string.IsNullOrWhiteSpace(filterResult))
 									{
 										emittedScript.Clear();
 										emittedScript.Append(filterResult);
 									}
-			                 	});
+								});
 		}
-		
+
 		private void RegisterFilters()
 		{
-			_filters.Add(() => dotLessFilter.GetDotLessProcessingFilter(_httpContext,_scriptLoader.DependencyContainer));
+			if (_scriptLoader.DependencyContainer.EnableDotLessSupport)
+			{
+				_filters.Add(() => dotLessFilter.GetDotLessProcessingFilter(_httpContext, _scriptLoader.DependencyContainer));
+			}
 			_filters.Add(() => new ScriptMinifierFilter(_httpContext));
 		}
 
@@ -133,8 +136,8 @@ namespace ScriptDependencyExtension
 			{
 				if (_scriptLoader.DependencyContainer.ShouldCombineScripts)
 				{
-				    if (!cssCombineList.Contains(dependency.ScriptName))
-				        cssCombineList.Add(dependency.ScriptName);
+					if (!cssCombineList.Contains(dependency.ScriptName))
+						cssCombineList.Add(dependency.ScriptName);
 				}
 				else
 				{
@@ -172,7 +175,7 @@ namespace ScriptDependencyExtension
 				{
 					buffer.Append(fullScriptInclude);
 				}
-                _scriptCache.AddToAlreadyRenderedScripts(dependency.ScriptName);
+				_scriptCache.AddToAlreadyRenderedScripts(dependency.ScriptName);
 			}
 		}
 
