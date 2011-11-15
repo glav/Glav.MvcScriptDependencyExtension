@@ -145,11 +145,16 @@ namespace ScriptDependencyExtension
                 if (typeAttrib != null)
                 {
                     scriptDependency.TypeOfScript = ScriptType.Javascript;
-                    if (typeAttrib.Value.ToLowerInvariant() == XmlConstants.CSSTypeValue)
+					var normalisedTypeAttrib = typeAttrib.Value.ToLowerInvariant();
+                    if (normalisedTypeAttrib == XmlConstants.CSSTypeValue)
                     {
                         scriptDependency.TypeOfScript = ScriptType.CSS;
                     }
-                }
+					if (normalisedTypeAttrib == XmlConstants.DOTLessTypeValue)
+					{
+						scriptDependency.TypeOfScript = ScriptType.dotLess;
+					}
+				}
 
                 var file = dependency.Element(XmlConstants.ScriptFileElement);
                 if (file != null)

@@ -41,7 +41,7 @@ namespace ScriptDependencyExtension.Handler
 			}
 			if (string.IsNullOrWhiteSpace(scriptToRender))
 			{
-				var engine = new ScriptEngine(contextAdaptor, new ScriptDependencyLoader(contextAdaptor));
+				var engine = new ScriptEngine(contextAdaptor, scriptLoader);
 				var listOfFiles = dependencies.Select(d => d.ScriptPath).ToList();
 				var combiner = new FileCombiner(contextAdaptor, listOfFiles);
 				StringBuilder contents = new StringBuilder(combiner.CombineFiles());

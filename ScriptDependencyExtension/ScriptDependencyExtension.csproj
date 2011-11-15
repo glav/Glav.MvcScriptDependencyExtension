@@ -34,6 +34,9 @@
     <Reference Include="AjaxMin">
       <HintPath>..\Dependencies\AjaxMin.dll</HintPath>
     </Reference>
+    <Reference Include="dotless.Core">
+      <HintPath>..\Dependencies\dotless.Core.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Web" />
@@ -50,6 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants\ScriptHelperConstants.cs" />
+    <Compile Include="Filters\dotLessFilter.cs" />
     <Compile Include="Handler\ScriptServeHandler.cs" />
     <Compile Include="Filters\IScriptProcessingFilter.cs" />
     <Compile Include="Helpers\IUniqueHashValueGenerator.cs" />

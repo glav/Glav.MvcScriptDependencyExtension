@@ -1,3 +1,15 @@
-﻿p.intro {
+﻿@import "test.less";  
+
+p.intro {
     font-style:italic;
+}
+
+div {
+    border: 1px dotted @color-red;
+    .class1 {
+        color: red;
+        .class2 {
+            background-color: green;
+        }
+    }
 }

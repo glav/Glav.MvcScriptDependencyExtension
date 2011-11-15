@@ -22,6 +22,8 @@ namespace ScriptDependencyExtension.Constants
 		public const string MinifyScriptsInReleaseMode = "MinifyCombinedScriptsInReleaseMode";
 
         public const string CSSTypeValue = "css";
+		public const string JSTypeValue = "js";
+		public const string DOTLessTypeValue = "less";
 
 
     }

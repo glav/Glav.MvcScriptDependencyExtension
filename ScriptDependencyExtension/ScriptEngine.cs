@@ -75,6 +75,7 @@ namespace ScriptDependencyExtension
 		
 		private void RegisterFilters()
 		{
+			_filters.Add(() => dotLessFilter.GetDotLessProcessingFilter(_httpContext,_scriptLoader.DependencyContainer));
 			_filters.Add(() => new ScriptMinifierFilter(_httpContext));
 		}
 

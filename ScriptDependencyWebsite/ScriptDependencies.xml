@@ -33,6 +33,10 @@
     </RequiredDependencies>
   </Dependency>
 
+  <Dependency Name="test.less" Type="less">
+    <ScriptFile>~/Content/test.less</ScriptFile>
+  </Dependency>
+
   <Dependency Name="Microsoft-Mvc-Validation" Type="js">
     <ScriptFile>~/Scripts/MicrosoftMvcValidation.js</ScriptFile>
     <RequiredDependencies>

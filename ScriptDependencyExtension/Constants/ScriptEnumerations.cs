@@ -15,7 +15,8 @@ namespace ScriptDependencyExtension.Constants
     public enum ScriptType
     {
         Javascript,
-        CSS 
+        CSS,
+		dotLess
     }
 
 }
