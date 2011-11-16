@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Dependencies ReleaseSuffix="min" DebugSuffix="debug" VersionIdentifier="123" 
-              VersionMonikerQueryStringName="v" CombineScripts="false" MinifyCombinedScriptsInReleaseMode="true">
+              VersionMonikerQueryStringName="v" CombineScripts="false" MinifyCombinedScriptsInReleaseMode="true" EnableDotLessSupport="true">
 
   <Dependency Name="jQuery-validate-unobtrusive" Type="js">
     <ScriptFile>~/Scripts/jquery.validate.unobtrusive.js</ScriptFile>
@@ -73,10 +73,16 @@
     <ScriptFile>~/Content/Script2.js</ScriptFile>
   </Dependency>
 
-  <Dependency Name="AllScripts">
+  <Dependency Name="AllScripts" Type="js">
     <RequiredDependencies>
       <Name>jQuery-validate-unobtrusive</Name>
       <Name>Microsoft-Mvc-Validation</Name>
     </RequiredDependencies>
   </Dependency>
+
+  <Dependency Name="Test1.less" Type="less">
+    <ScriptFile>Test1.less</ScriptFile>
+  </Dependency>
+
+
 </Dependencies>

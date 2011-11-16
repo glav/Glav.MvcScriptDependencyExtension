@@ -1,0 +1,15 @@
+﻿@import "Test1.less";
+
+body
+{
+    color:White;
+}
+
+div
+{
+    .class1 
+    {
+        color: @testcolor;
+    }
+}
+

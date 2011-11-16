@@ -1,11 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <TestSettings name="Local" id="6d566328-09ed-46b2-a22c-741a7f398273" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
   <Description>These are default test settings for a local test run.</Description>
-  <Deployment>
-    <DeploymentItem filename="ScriptDependencyTests\TestFile1.txt" />
-    <DeploymentItem filename="ScriptDependencyTests\ScriptDependencies.xml" />
-    <DeploymentItem filename="ScriptDependencyTests\TestFile2.txt" />
-  </Deployment>
   <Execution>
     <TestTypeSpecific>
       <UnitTestRunConfig testTypeId="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b">
