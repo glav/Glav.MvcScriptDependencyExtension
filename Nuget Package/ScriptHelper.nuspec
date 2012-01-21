@@ -10,7 +10,7 @@
 	into web pages including file combination, JS/CSS minification. In addition, CSS and JS scripts can be given
 	logical/grouped names that express dependencies and include all dependencies in the page with combination and
 	minification.</description>
-<projectUrl>http://bitbucket.org/</projectUrl>
+<projectUrl>https://bitbucket.org/glav/mvc-script-dependency-extension</projectUrl>
 		<frameworkAssemblies>
 		  <frameworkAssembly assemblyName="System.Web.Mvc" targetFramework="net40" />
 		</frameworkAssemblies>
