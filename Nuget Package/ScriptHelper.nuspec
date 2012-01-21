@@ -19,5 +19,6 @@
       <file src="lib\*.dll" target="lib" />
       <file src="content\ScriptDependencies.xml" target="content" />
       <file src="content\web.config.transform" target="content" />
+      <file src="content\ScriptHelper-ReadMe.txt" target="content" />
   </files>
 </package>
