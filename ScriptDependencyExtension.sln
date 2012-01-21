@@ -17,6 +17,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dependencies", "Dependencies", "{F50B783D-EC64-420C-8718-E32CEAC64FBB}"
 	ProjectSection(SolutionItems) = preProject
 		Dependencies\AjaxMin.dll = Dependencies\AjaxMin.dll
+		Dependencies\dotless.Core.dll = Dependencies\dotless.Core.dll
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Nuget Package", "Nuget Package", "{CE52B283-C21C-4B2B-A154-78C3B838162C}"
