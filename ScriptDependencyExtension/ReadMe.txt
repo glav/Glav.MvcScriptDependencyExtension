@@ -33,7 +33,7 @@ It's format is shown below:
 
 <?xml version="1.0" encoding="utf-8" ?>
 <Dependencies ReleaseSuffix="min" DebugSuffix="" VersionIdentifier="1.0" VersionMonikerQueryStringName="v" 
-              CombineScripts="false" MinifyCombinedScriptsInReleaseMode="true">
+              CombineScripts="false" MinifyCombinedScriptsInReleaseMode="true"  EnableDotLessSupport="true">
 
   <Dependency Name="YourDependencyName" Type="js">
     <ScriptFile>~/Scripts/SomeFile.js</ScriptFile>
@@ -82,6 +82,9 @@ The attributes in the <Dependencies> element above do the following:
     automatically minifed when the application is running release mode. Currently the
 	default minifier is the Microsoft minifier but this is easily swapped out (however
 	requires you to code the implementation/adapter to your alternate implementation)
+--> EnableDotLessSupport="true": This will enable parsing of dotLess syntax in your CSS files. There is no
+	requirement to have a .less extension or anything like that. dotLess parsing will automatically be run on
+	every file.
 
 * Once you have defined your dependencies and the scripts that make them up, 
 you need to ensure the handler is in place that generates the combined links.
@@ -116,6 +119,33 @@ Add the following handler to your <system.webServer> section as shown below:
   - of any previous 'RequiresScriptsDeferred' calls. This includes calls in the calling page,
   - partial views or anywhere in the page lifecycle prior to rendering. 1 script link will
   - be generated only which will describe all dependencies required.
+
+dotLess Support
+~~~~~~~~~~~~~~~
+The ScriptHelper supports parsing CSS files with dotLess syntax. One of the features of dotLess is being 
+able to @import other files into your CSS file. This feature relies on physical paths and because the
+ScriptHelper is running from an ambiguous directory path this is often not resolved. This is catered for
+in the script helper by simply defining a script dependency in the ScriptDependencies.xml file with the name
+of the file that dotLess needs to import. The ScriptHelper will then look for @import statements and try and
+match the name of the import with known dependencies defined in the ScriptDependencies.xml file. It will then
+replace the @import statement with the fully qualified path name defined for the dependency.
+For example :-
+CSS File may contain:
+@import "Common.less"
+
+.some-style {
+	color: @baseColor;
+}
+
+ScriptDependencies.xml should contain:
+  <Dependency Name="Common.less" Type="css">
+    <ScriptFile>~/Styles/Common.less</ScriptFile>
+  </Dependency>
+
+and everything will be resolved fine.
+
+
+
 
 You can contact me via my blog http://weblogs.asp.net/pglavich if you have any questions, 
 or via email at glav@aspalliance.com. You can find the full source code to this library
