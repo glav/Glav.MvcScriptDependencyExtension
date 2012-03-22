@@ -3,13 +3,13 @@
   <metadata>
     <id>ScriptHelper</id>    
     <title>ScriptHelper</title>
-    <version>1.0</version>
+    <version>1.1</version>
     <authors>Paul Glavich
     </authors>
     <description>ScriptHelper is a small and simple set of helper methods to allow easy Javascript and CSS inclusion
-	into web pages including file combination, JS/CSS minification. In addition, CSS and JS scripts can be given
-	logical/grouped names that express dependencies and include all dependencies in the page with combination and
-	minification.</description>
+	into web pages including file combination, JS/CSS minification and dotLess support. In addition, CSS and JS scripts can be given
+	logical/grouped names that express dependencies and include all dependencies in the page with combination, minification
+	and de-duplication if scripts are includded multiple times.</description>
 <projectUrl>https://bitbucket.org/glav/mvc-script-dependency-extension</projectUrl>
 		<frameworkAssemblies>
 		  <frameworkAssembly assemblyName="System.Web.Mvc" targetFramework="net40" />
