@@ -10,10 +10,31 @@
     </RequiredDependencies>
   </Dependency>
 
+  <Dependency Name="no-file-group" Type="js">
+    <RequiredDependencies>
+      <Name>no-file</Name>
+      <Name>no-file2</Name>
+    </RequiredDependencies>
+  </Dependency>
+
+  <Dependency Name="no-file2" Type="js">
+    <RequiredDependencies>
+      <Name>local-jQuery-debug</Name>
+    </RequiredDependencies>
+  </Dependency>
+
   <Dependency Name="no-file" Type="js">
     <RequiredDependencies>
-      <Name>jquery</Name>
+      <Name>local-jQuery</Name>
     </RequiredDependencies>
+  </Dependency>
+
+  <Dependency Name="local-jQuery-debug" Type="js">
+    <ScriptFile>jquery-1.4.1.js</ScriptFile>
+  </Dependency>
+
+  <Dependency Name="local-jQuery" Type="js">
+    <ScriptFile>jquery-1.4.1.js</ScriptFile>
   </Dependency>
 
   <Dependency Name="jQuery-validate" Type="js">

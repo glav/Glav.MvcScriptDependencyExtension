@@ -32,8 +32,11 @@ namespace ScriptDependencyExtension.Helpers
 			var fileContents = new StringBuilder();
 			foreach (var filename in _filesToCombine)
 			{
-				var fileData = File.ReadAllText(_httpContext.ResolvePhysicalFilePathFromRelative(filename));
-				fileContents.Append(fileData);
+				if (!string.IsNullOrWhiteSpace(filename))
+				{
+					var fileData = File.ReadAllText(_httpContext.ResolvePhysicalFilePathFromRelative(filename));
+					fileContents.Append(fileData);
+				}
 			}
 			return fileContents.ToString();
 		}

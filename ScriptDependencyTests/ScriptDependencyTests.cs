@@ -2,9 +2,12 @@
 using System.Text;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ScriptDependencyExtension;
 using System.Web.Mvc;
+using ScriptDependencyExtension.Handler;
+using ScriptDependencyExtension.Helpers;
 using ScriptDependencyExtension.Http;
 using ScriptDependencyExtension.Constants;
 using System.Collections;
@@ -190,14 +193,57 @@ namespace ScriptDependencyTests
             mockContext.HasValidWebContext = true;
             mockContext.IsDebuggingEnabled = false;
 
-            var script1 = ScriptHelper.RequiresScripts(mockContext, "no-file");
+			var script1 = ScriptHelper.RequiresScripts(mockContext, "jQuery");
 
             Assert.IsTrue(!string.IsNullOrWhiteSpace(script1.ToString()));
 			Assert.IsTrue(script1.ToString().Contains("src='/Scripts/jquery-1.4.1.min.js" + VERSION_QUERY_STRING));
 
         }
 
-        [TestMethod]
+		[TestMethod]
+		[DeploymentItem("ScriptDependencies.xml")]
+		[DeploymentItem("jquery-1.4.1.js")]
+		[DeploymentItem("jquery-1.4.1.debug.js")]
+		public void SHouldNotThrowIfNoScriptFilePresentInDependencyOrSubDependencies()
+		{
+			var mockContext = new MockContext();
+			mockContext.HasValidWebContext = true;
+			mockContext.IsDebuggingEnabled = false;
+			var loader = new ScriptDependencyLoader(mockContext);
+			var engine = new ScriptEngine(mockContext, loader);
+			
+			loader.Initialise();
+			loader.DependencyContainer.ShouldCombineScripts = true;
+			
+			var builtScript = new StringBuilder();
+			var combinedScript = new StringBuilder();
+			
+			engine.GenerateDependencyScript("no-file-group", builtScript);
+			engine.GenerateCombinedScriptsIfRequired(combinedScript);
+			
+			var generatedUrl = combinedScript.ToString();
+			int startPos = generatedUrl.IndexOf("src='");
+			Assert.IsTrue(startPos >= 0);
+			int endPos = generatedUrl.IndexOf("'></script>");
+			Assert.IsTrue(endPos >= 0);
+			var urlFragment = generatedUrl.Substring(startPos + 5, endPos - startPos - 5);
+			var rawUrl = string.Format("http://localhost{0}", urlFragment);
+
+			mockContext.SetRequestRawUrl(rawUrl);
+
+			var handler = new ScriptServeHandler(mockContext, loader, engine, new TokenisationHelper());
+			string contentType;
+			var output = handler.ProcessRequestForUrl(rawUrl, out contentType);
+
+			Assert.IsNotNull(contentType);
+			Assert.AreEqual<string>(ScriptHelperConstants.ContentType_Javascript,contentType);
+			Assert.IsNotNull(output);
+			Assert.IsTrue(output.Contains("JavaScript Library")); // this should be present as part of the comments of jQuery which aren't removed by the minifier
+
+
+		}
+		
+		[TestMethod]
         [DeploymentItem("ScriptDependencies.xml")]
         public void ScriptsShouldRenderInCorrectOrder()
         {
@@ -271,6 +317,14 @@ namespace ScriptDependencyTests
         public bool IsDebuggingEnabled { get; set; }
         public bool HasValidWebContext { get; set; }
 
+		public HttpRequest Request { get; set; }
+
+		public void SetRequestRawUrl(string url)
+		{
+			var uri = new Uri(url);
+			Request = new HttpRequest("dummy.aspx",uri.AbsoluteUri,uri.PathAndQuery);
+		}
+
 		private IDictionary<string,object> _globalCache = new Dictionary<string, object>();
 
         private IDictionary _perRequestItemCache = new Dictionary<object, object>();
@@ -278,6 +332,9 @@ namespace ScriptDependencyTests
 
         public string ResolveScriptRelativePath(string relativePath)
         {
+			if (string.IsNullOrWhiteSpace(relativePath))
+				return relativePath;
+
             return relativePath.Replace("~", string.Empty);
         }
 

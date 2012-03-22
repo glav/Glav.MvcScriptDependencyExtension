@@ -65,8 +65,12 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="jquery-1.4.1.debug.js" />
-    <Content Include="jquery-1.4.1.js" />
+    <Content Include="jquery-1.4.1.debug.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="jquery-1.4.1.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="ScriptDependencies.xml">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
